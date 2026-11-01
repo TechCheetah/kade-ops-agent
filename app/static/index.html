@@ -225,7 +225,7 @@ section[hidden] { display: none !important; }
     <div class="col" style="flex:1">
       <div class="welcome" id="welcome">
         <h1>Ask Kade's <em>operations agent</em>.</h1>
-        <p>It answers from company policies, supplier contracts and the ERP, cites its sources, writes short reports and opens helpdesk tickets. Kade Logistics is a fictional freight forwarder; all data is invented for this demo.</p>
+        <p>It looks things up in Kade's policies, supplier contracts and ERP before answering, and tells you where each fact came from. It can also write short reports and open helpdesk tickets. Kade Logistics is a made-up freight forwarder, and every document and invoice here was invented for the demo.</p>
         <p class="fine" id="facts"></p>
         <div class="suggest" id="suggest"></div>
       </div>
@@ -243,18 +243,18 @@ section[hidden] { display: none !important; }
   </section>
 
   <section id="tab-evals" class="page" hidden>
-    <p>Each configuration answers the same questions, and every answer is graded automatically. The grader checks for the facts that must appear, numbers the agent must not invent, the tool it should have used and actions it must not take unasked. The model this demo runs on was picked from these results.</p>
+    <p>Every configuration gets the same questions, and a script grades each answer. It checks that the right facts are there, that no numbers were made up, that the agent used the right tool and that it didn't open a ticket nobody asked for. The model behind this demo was chosen from these results.</p>
     <div id="evals-body"><p class="note">Loading…</p></div>
   </section>
 
   <section id="tab-how" class="page" hidden>
     <div class="how">
-      <div><h3>Retrieval</h3><p>The 8 documents are split by section and indexed with BM25, implemented in about 50 lines with no vector database. That is enough for a corpus this size. Hybrid search with embeddings is the next step when it grows.</p></div>
-      <div><h3>Tools</h3><p><code>search_documents</code>, <code>read_document</code>, <code>query_invoices</code> (ERP) and <code>create_ticket</code> (helpdesk). Schemas are closed, and tool errors go back to the model as <code>is_error</code> results so it can recover.</p></div>
-      <div><h3>Agent loop</h3><p>A manual tool-use loop on the Anthropic Python SDK, capped at 8 steps. It handles refusals, <code>max_tokens</code> and <code>pause_turn</code> explicitly. Earlier turns are sent back as plain text, so follow-up questions keep their context. On Opus and Sonnet, a declined request falls back server-side to another model.</p></div>
-      <div><h3>Cost and speed</h3><p>The demo runs on Haiku 5.5 because the evals showed it: the same pass rate as Opus 5.5 at about 1/24 of the cost per answer and roughly half the latency. Prompt caching covers the system prompt and tool definitions, and each call's usage is priced per model in the trace.</p></div>
-      <div><h3>Guards</h3><p>A firewall rate limit per IP at the edge, a daily API budget, caps on question length, history and steps. Tickets are created only when the user asks for one.</p></div>
-      <div><h3>Tests</h3><p><code>pytest</code> covers retrieval, tools, the agent loop with a fake client, the API guards and the grader. Evals run separately because they call the real model and cost money.</p></div>
+      <div><h3>Retrieval</h3><p>Each of the 8 documents is split into sections and indexed with BM25: about 50 lines of Python and no vector database, which is plenty for this many documents. A bigger corpus would get embeddings and hybrid search.</p></div>
+      <div><h3>Tools</h3><p>Four of them: <code>search_documents</code>, <code>read_document</code>, <code>query_invoices</code> for the ERP and <code>create_ticket</code> for the helpdesk. The schemas reject extra fields, and when a tool fails the error goes back to the model as an <code>is_error</code> result so it can try again.</p></div>
+      <div><h3>Agent loop</h3><p>A tool-use loop written by hand on the Anthropic Python SDK, stopped after 8 steps. Refusals, <code>max_tokens</code> and <code>pause_turn</code> each have their own handling. Earlier turns go back to the model as plain text, which is why a follow-up like "and in Berlin?" works. On Opus and Sonnet the API retries a refused request on another model.</p></div>
+      <div><h3>Cost and speed</h3><p>The demo runs on Haiku 5.5. In the evals it passed the same cases as Opus 5.5 for about 1/24 of the cost per answer, in roughly half the time. The system prompt and tool definitions are cached, and the trace prices every call by model.</p></div>
+      <div><h3>Guards</h3><p>Vercel's firewall allows each IP 8 questions an hour. The app adds a daily API budget and caps on question length, conversation length and steps. It only opens a ticket when someone asks for one.</p></div>
+      <div><h3>Tests</h3><p>The <code>pytest</code> suite covers retrieval, the tools, the agent loop (against a fake client), the API limits and the grader. Evals are a separate command because they call the real model and cost money.</p></div>
     </div>
   </section>
 </main>
@@ -334,14 +334,14 @@ async function send(text) {
   user.textContent = question;
   const agent = document.createElement("div");
   agent.className = "msg-agent";
-  agent.innerHTML = `<div class="pending"><span class="dots"><i></i><i></i><i></i></span>Working: searching documents and systems</div>`;
+  agent.innerHTML = `<div class="pending"><span class="dots"><i></i><i></i><i></i></span>Looking it up</div>`;
   $("thread").append(user, agent);
   agent.scrollIntoView({ behavior: "smooth", block: "end" });
 
   try {
     const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, history: history.slice(-8) }) });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(res.status === 429 ? "You've reached this demo's limit for the hour. Please try again later." : (typeof data.detail === "string" ? data.detail : "Something went wrong. Please try again."));
+    if (!res.ok) throw new Error(res.status === 429 ? "That's the demo's limit for this hour. Try again later." : (typeof data.detail === "string" ? data.detail : "Something went wrong. Please try again."));
     renderAnswer(agent, data);
     history.push({ role: "user", content: question }, { role: "assistant", content: data.answer.slice(0, 6000) });
   } catch (err) {
