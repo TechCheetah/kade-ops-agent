@@ -32,6 +32,8 @@ def grade(case: dict, answer: str, tools: list[str]) -> list[str]:
     failures += [f"contains '{s}'" for s in case.get("none", []) if normalize(s) in a]
     if case.get("tool") and case["tool"] not in tools:
         failures.append(f"didn't call {case['tool']}")
+    if case.get("forbid_tool") in tools:
+        failures.append(f"called {case['forbid_tool']} without being asked")
     return failures
 
 

@@ -10,7 +10,7 @@ All company data in `data/` is invented for the demo.
 - **RAG**: section-level chunking and BM25 retrieval over 8 documents (`app/retrieval.py`), with no vector database because the corpus doesn't need one yet.
 - **Integrations**: an ERP invoice query and a helpdesk ticket tool (`app/tools.py`). Schemas are closed, and tool errors go back to the model so it can recover.
 - **Cost and observability**: prompt caching, per-call usage priced per model, and a trace for every request.
-- **Evals**: 14 graded cases (`evals/cases.json`) checking required facts, invented numbers and tool choice, run across model, effort and prompt configurations (`evals/run.py`).
+- **Evals**: 18 graded cases (`evals/cases.json`) checking required facts, invented numbers and tool choice, run across model, effort and prompt configurations (`evals/run.py`).
 - **Guards**: per-IP rate limit, daily API budget and input length cap.
 
 ## Run

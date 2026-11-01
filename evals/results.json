@@ -1,0 +1,703 @@
+{
+  "generated_at": "2026-11-01T15:29:31+00:00",
+  "as_of": "2026-11-01",
+  "case_count": 18,
+  "runs": [
+    {
+      "config": "opus",
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "prompt": "v1",
+      "pass_rate": 1.0,
+      "avg_cost_usd": 0.01466,
+      "avg_latency_ms": 7210,
+      "avg_tool_calls": 1.56,
+      "cases": [
+        {
+          "id": "hotel-ams",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.005843,
+          "latency_ms": 4039,
+          "tool_calls": 1,
+          "answer": "You can spend up to **€180.00 per night** on a hotel in Amsterdam. Paris and London have the same limit. All other cities have a limit of €140.00 per night [travel-expense-policy]."
+        },
+        {
+          "id": "hotel-other",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.006406,
+          "latency_ms": 3156,
+          "tool_calls": 1,
+          "answer": "The nightly hotel limit for Berlin is **€140.00**. Berlin isn't one of the higher-limit cities: Amsterdam, Paris and London get €180.00, and every other city gets €140.00 [travel-expense-policy].\n\nBefore you book, your line manager must approve the trip [travel-expense-policy]."
+        },
+        {
+          "id": "business-class",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.004591,
+          "latency_ms": 4514,
+          "tool_calls": 1,
+          "answer": "**No.** A 7.5-hour flight has to be booked in economy. Business class is only allowed for flights longer than 8 hours [travel-expense-policy].\n\nNew York is outside the EU, so before you book, the trip needs approval from both your line manager and the Finance Director [travel-expense-policy]."
+        },
+        {
+          "id": "claim-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.008862,
+          "latency_ms": 6555,
+          "tool_calls": 1,
+          "answer": "**Probably yes, but submit them now.** At 45 days you've missed the normal deadline, but the policy only rejects claims after 60 days.\n\n- **Normal deadline:** Claims must be submitted in the expense tool within 30 days of the trip [travel-expense-policy].\n- **Rejection point:** Claims submitted later than 60 days are rejected [travel-expense-policy].\n- **Receipts:** You need a receipt for every item above €25.00 [travel-expense-policy].\n\nThe policy doesn't say what happens to claims submitted between 31 and 60 days, so it may not be automatic. You might need extra approval, for example. Ask Finance if you want to be sure. Either way, submit within the next 15 days so you stay under the 60-day limit."
+        },
+        {
+          "id": "abroad-days",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.007473,
+          "latency_ms": 3666,
+          "tool_calls": 1,
+          "answer": "You can work from another country for up to **20 working days per calendar year**. You need to register it with HR **at least 10 working days in advance**. The notice is required for tax and insurance reasons [remote-work-policy].\n\nIf you're on the operations team at the Rotterdam warehouse, the general remote work rules don't apply to you, because that work has to be done on site [remote-work-policy]."
+        },
+        {
+          "id": "transnordic-terms",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.006703,
+          "latency_ms": 5115,
+          "tool_calls": 1,
+          "answer": "These are the payment terms in the TransNordic Haulage A/S agreement [supplier-contract-transnordic]:\n\n- **Payment period:** Invoices must be paid within **45 days of the invoice date**.\n- **Late payment:** Overdue amounts build up interest at **1% per month**.\n- **Disputes:** You have to raise a dispute **in writing within 14 days of receiving** the invoice. The part you don't dispute still has to be paid on time.\n\nThe payment terms section doesn't mention a discount for paying early. The GreenPack contract has one, but TransNordic's doesn't."
+        },
+        {
+          "id": "sla-credit",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.031082,
+          "latency_ms": 14644,
+          "tool_calls": 3,
+          "answer": "**No. TransNordic missed the guarantee in Q3 2026, so we're entitled to a 5% credit on that quarter's invoices. That's €5,007.50.**\n\n**What the contract says**\n- TransNordic guarantees 96% on-time delivery per calendar quarter. If they fall below that, we get a 5% credit on that quarter's invoices [supplier-contract-transnordic].\n- Their Q3 2026 on-time delivery was 94.8%, which is 1.2 points short [q3-2026-operations-report].\n- Operations also recommends reviewing TransNordic's Q3 service level [q3-2026-operations-report].\n\n**How the credit is calculated (invoices issued July–September 2026)**\n\n| Invoice | Issue date | Amount | Status |\n|---|---|---|---|\n| INV-24051 | 2026-08-04 | €48,250.00 | Paid |\n| INV-24077 | 2026-09-01 | €51,900.00 | Open, 16 days overdue |\n| **Total** | | **€100,150.00** | |\n\n€100,150.00 × 5% = **€5,007.50**\n\n**Things to check**\n- **Which invoices count:** The contract doesn't say whether \"that quarter's invoices\" means invoices issued in Q3 or invoices for work done in Q3. INV-24102 (€49,875.50) was issued on 2026-10-01 and may cover September deliveries. If it counts, the credit would be €150,025.50 × 5% = **€7,501.28**. Please confirm what that invoice covers.\n- **Overdue invoice:** INV-24077 was due on 2026-10-16 and is still unpaid. Under the contract, late payments are charged 1% interest per month. Disputes have to be raised in writing within 14 days of receiving the invoice, and the undisputed part still has to be paid on time [supplier-contract-transnordic]. Because of that, it's probably best to pay it now and claim the credit separately, rather than holding the payment back.\n\nI can open a Finance ticket to claim the credit if you'd like."
+        },
+        {
+          "id": "overdue-total",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.008609,
+          "latency_ms": 4903,
+          "tool_calls": 1,
+          "answer": "As of 1 November 2026, **3 supplier invoices are overdue, totalling €81,190.00** [ERP].\n\n| Invoice | Supplier | Amount | Due date | Days overdue |\n|---|---|---|---|---|\n| INV-24090 | GreenPack Solutions | €9,420.00 | 2026-10-15 | 17 |\n| INV-24077 | TransNordic Haulage | €51,900.00 | 2026-10-16 | 16 |\n| INV-24095 | Rhine Express | €19,870.00 | 2026-10-25 | 7 |\n| **Total** | | **€81,190.00** | | |\n\nTransNordic Haulage's invoice makes up about 64% of the total.\n\nThis list only includes open invoices. Disputed invoices are counted separately, so any that are past their due date aren't shown here."
+        },
+        {
+          "id": "early-discount",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.013009,
+          "latency_ms": 7829,
+          "tool_calls": 2,
+          "answer": "**Probably nothing. The 10-day window for INV-24110 seems to have already closed.**\n\n- **The discount:** GreenPack gives 2% off if an invoice is paid within 10 days. Otherwise payment is due within 30 days [supplier-contract-greenpack].\n- **The invoice:** INV-24110 is for €10,180.00. It was issued on 2026-10-20, is due on 2026-11-19 and is still open [ERP].\n- **The timing:** Counting from the issue date, the 10 days ended on 2026-10-30. Today is 2026-11-01, so 12 days have passed.\n\nIf the discount still applied, it would be 2% × €10,180.00 = **€203.60**, so we would pay €9,976.40.\n\n**One open point:** The contract doesn't say when the 10 days start (invoice date or the date we received the invoice). If we received INV-24110 on 2026-10-22 or later and the window counts from receipt, we may still qualify. Ask Finance or GreenPack to confirm before you pay at the discounted amount.\n\nAlso, the other GreenPack invoice, INV-24090 (€9,420.00), is 17 days overdue [ERP]."
+        },
+        {
+          "id": "sev1-escalation",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.016127,
+          "latency_ms": 8257,
+          "tool_calls": 2,
+          "answer": "By now, both the **IT Lead and the CTO** should have been informed.\n\nThis counts as a **SEV1** incident because the customs filing system is a core system and it's down for everyone [it-incident-runbook]. That means:\n\n1. **On-call engineer:** should have responded within 15 minutes, at any hour [it-incident-runbook].\n2. **IT Lead:** should have been paged by the on-call engineer right away [it-incident-runbook].\n3. **CTO:** a SEV1 goes to the CTO if it isn't fixed within 2 hours [it-incident-runbook]. At 2.5 hours, the CTO should have been told about 30 minutes ago.\n\nAfter the fix, a post-mortem is required and must be published within 5 business days [it-incident-runbook].\n\n**Not covered:** The runbook doesn't say whether the Customs Desk, Operations or customers need to be told. I couldn't find any rule on that.\n\n**If it hasn't been reported yet:** call the on-call number, which is allowed for SEV1 only. You can also report it through the helpdesk [it-incident-runbook]. I can open an IT ticket for you if you'd like."
+        },
+        {
+          "id": "termination-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.011953,
+          "latency_ms": 7570,
+          "tool_calls": 1,
+          "answer": "**Your written notice has to reach TransNordic before 2 March 2027.** If it doesn't, the contract renews automatically for another 12 months [supplier-contract-transnordic].\n\n- **Contract:** SUP-2025-014, signed 2 June 2025, running for 24 months, so it ends around 2 June 2027 [supplier-contract-transnordic].\n- **Termination clause:** Either side can end it with 90 days' written notice. It renews for 12 months unless terminated before 2 March 2027 [supplier-contract-transnordic].\n\nOne thing to watch: counting 90 days back from 2 June 2027 gives 4 March 2027, which is two days later than the date in the contract. Go by the earlier date, 2 March 2027. In practice, send the notice well before then, because the contract doesn't say whether \"before 2 March\" means the date you send it or the date they receive it."
+        },
+        {
+          "id": "not-in-docs",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.018497,
+          "latency_ms": 7983,
+          "tool_calls": 3,
+          "answer": "I couldn't find anything in the internal documents about paid parental leave, so I can't tell you how many weeks employees get.\n\nI searched for parental, maternity, paternity and birth leave, and for a general leave or absence policy. None of these turned up a leave policy. The People & Culture documents I found were the remote work policy [remote-work-policy] and the onboarding checklist [onboarding-checklist], and neither one mentions leave.\n\nThe missing piece is a leave policy or employee handbook. People & Culture should be able to give you the official answer. I can open a ticket asking them for it if you'd like."
+        },
+        {
+          "id": "ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.020172,
+          "latency_ms": 8107,
+          "tool_calls": 2,
+          "answer": "I've opened urgent IT ticket **OPS-1042**, \"WMS down at Rotterdam warehouse for all users.\"\n\n**Which severity applies isn't clear yet:**\n- The IT runbook treats a core system that's down for everyone as **SEV1**. IT should respond within 15 minutes, 24/7, and the on-call engineer pages the IT Lead right away [it-incident-runbook].\n- A core system that's down for **one site** is **SEV2**, with a response within 1 hour during business hours [it-incident-runbook].\n\nYour report fits both: everyone is affected, but only at Rotterdam. If no one else uses the WMS (for example, if the Amsterdam office doesn't), this is probably SEV1. If you can, tell IT whether the WMS is working anywhere else so they can set the right level.\n\nFor reference, the WMS also had a SEV1 outage on 2 September that lasted 50 minutes [q3-2026-operations-report]."
+        },
+        {
+          "id": "report",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.014806,
+          "latency_ms": 7788,
+          "tool_calls": 1,
+          "answer": "# Open supplier invoices as of 01-11-2026\n\n**Summary:** There are 5 open invoices from 3 suppliers, totalling **€141,245.50**. Three are past their due date, totalling **€81,190.00**. TransNordic Haulage makes up 72% of the open amount. [ERP]\n\n| Supplier | Invoice | Amount | Due date | Overdue |\n|---|---|---|---|---|\n| **TransNordic Haulage** | INV-24077 | €51,900.00 | 16-10-2026 | Yes, 16 days |\n| | INV-24102 | €49,875.50 | 15-11-2026 | No |\n| | *Subtotal* | ***€101,775.50*** | | |\n| **Rhine Express** | INV-24095 | €19,870.00 | 25-10-2026 | Yes, 7 days |\n| | *Subtotal* | ***€19,870.00*** | | |\n| **GreenPack Solutions** | INV-24090 | €9,420.00 | 15-10-2026 | Yes, 17 days |\n| | INV-24110 | €10,180.00 | 19-11-2026 | No |\n| | *Subtotal* | ***€19,600.00*** | | |\n| **Total** | | **€141,245.50** | | |\n\n**Check:** €101,775.50 + €19,870.00 + €19,600.00 = €141,245.50. This matches the total in the ERP.\n\n**Overdue:** €51,900.00 + €19,870.00 + €9,420.00 = €81,190.00.\n\nDisputed invoices have their own status in the ERP, so they aren't included here."
+        },
+        {
+          "id": "q3-credit-eur",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.031546,
+          "latency_ms": 16154,
+          "tool_calls": 3,
+          "answer": "**TransNordic owes us a credit of €5,007.50 for Q3 2026.**\n\n**Why the credit applies**\n- The contract guarantees 96% on-time delivery per calendar quarter. If delivery falls below that, we get a 5% credit on that quarter's invoices [supplier-contract-transnordic].\n- TransNordic's on-time delivery in Q3 2026 was 94.8%, which is below 96% [q3-2026-operations-report].\n\n**How it's calculated (invoices issued from 1 July to 30 September 2026)** [ERP]\n\n| Invoice | Issue date | Amount | Status |\n|---|---|---|---|\n| INV-24051 | 2026-08-04 | €48,250.00 | paid |\n| INV-24077 | 2026-09-01 | €51,900.00 | open, 16 days overdue |\n| **Total** | | **€100,150.00** | |\n\n€100,150.00 × 5% = **€5,007.50**\n\n**Not counted:** INV-24102 (€49,875.50) was issued on 2026-10-01, so it falls in Q4. If it covers work done in Q3 and is counted, the credit would be €7,501.28. The contract only says \"that quarter's invoices\" and doesn't specify whether that means the issue date or the service period.\n\nINV-24077 is still open, so the easiest way to claim the credit may be to subtract it from that payment."
+        },
+        {
+          "id": "warehouse-remote",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.015512,
+          "latency_ms": 4884,
+          "tool_calls": 1,
+          "answer": "No, you can't. The policy doesn't cover your role. Most employees can work from home up to 3 days a week, but Operations staff at the Rotterdam warehouse are excluded because their work has to be done on site [remote-work-policy].\n\nThe policy doesn't describe any exceptions. If you think your situation is different, People & Culture owns the policy and would be the ones to ask [remote-work-policy]."
+        },
+        {
+          "id": "no-unasked-ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.023493,
+          "latency_ms": 7502,
+          "tool_calls": 1,
+          "answer": "**This is most likely SEV1, so IT should respond within 15 minutes, 24/7** [it-incident-runbook].\n\n- **SEV1:** A core system is down for everyone. The warehouse management system counts as a core system. The on-call engineer must page the IT Lead immediately [it-incident-runbook].\n- **SEV2, if it's only Rotterdam:** The runbook makes a \"core system down for one site\" SEV2, with a response within 1 hour during business hours [it-incident-runbook]. If the system still works from Amsterdam or elsewhere, this would be SEV2. If nobody can use it, it's SEV1.\n\n**How to report it:** Report it through the helpdesk with the department, a short title, a description of the impact and the severity. Since this is likely SEV1, you can also phone the on-call number, which is only for SEV1 [it-incident-runbook].\n\nI can open an IT helpdesk ticket for this if you'd like."
+        },
+        {
+          "id": "rhine-paid",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.019196,
+          "latency_ms": 7112,
+          "tool_calls": 2,
+          "answer": "We haven't paid Rhine Express anything yet: **€0.00**, as of 2026-11-01 in the ERP. Their 2 invoices total €42,180.00, and neither has been paid:\n\n| Invoice | Issued | Due | Amount | Status |\n|---|---|---|---|---|\n| INV-24063 | 2026-08-20 | 2026-09-19 | €22,310.00 | Disputed (43 days past due date, not counted as overdue while disputed) |\n| INV-24095 | 2026-09-25 | 2026-10-25 | €19,870.00 | Open, 7 days overdue |\n\nINV-24095 is overdue and may need attention. If you want, I can check Rhine Express's contract terms (such as late-payment terms) or open a Finance ticket to follow up on the dispute."
+        }
+      ]
+    },
+    {
+      "config": "opus-low",
+      "model": "claude-opus-5-5",
+      "effort": "low",
+      "prompt": "v1",
+      "pass_rate": 1.0,
+      "avg_cost_usd": 0.01023,
+      "avg_latency_ms": 5633,
+      "avg_tool_calls": 1.33,
+      "cases": [
+        {
+          "id": "hotel-ams",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.004108,
+          "latency_ms": 2604,
+          "tool_calls": 1,
+          "answer": "Your limit is €180.00 per night for a hotel in Amsterdam [travel-expense-policy]. The same limit applies in Paris and London. In all other cities it's €140.00 per night [travel-expense-policy]."
+        },
+        {
+          "id": "hotel-other",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.004014,
+          "latency_ms": 3088,
+          "tool_calls": 1,
+          "answer": "The hotel limit for Berlin is €140.00 per night. The higher €180.00 limit only covers Amsterdam, Paris and London. Every other city, including Berlin, gets €140.00 [travel-expense-policy].\n\nYour line manager has to approve the trip before you book anything [travel-expense-policy]."
+        },
+        {
+          "id": "business-class",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.003851,
+          "latency_ms": 3062,
+          "tool_calls": 1,
+          "answer": "No, you can't. Your flight is 7.5 hours, and business class is only allowed on flights longer than 8 hours. You'll need to book economy [travel-expense-policy].\n\nNew York is outside the EU, so you need two approvals before you book: your line manager and the Finance Director [travel-expense-policy]."
+        },
+        {
+          "id": "claim-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.01025,
+          "latency_ms": 4971,
+          "tool_calls": 1,
+          "answer": "**Probably yes, but submit them soon. You have 15 days left before the hard cutoff.**\n\n- Claims should go into the expense tool **within 30 days** of the trip. At 45 days, yours is already late [travel-expense-policy].\n- Claims submitted **more than 60 days** after the trip are **rejected** [travel-expense-policy]. So the last day you can submit is day 60.\n- You need a receipt for **every item above €25** [travel-expense-policy].\n\nThe policy doesn't say what happens to claims submitted between day 30 and day 60. It doesn't say they'll be accepted automatically, and it doesn't mention needing approval or a reason for the delay. Submit as soon as you can, and check with Finance if you want to be sure it will go through."
+        },
+        {
+          "id": "abroad-days",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.007398,
+          "latency_ms": 3628,
+          "tool_calls": 1,
+          "answer": "You can work from another country for up to **20 working days per calendar year**. You need to register it with HR **at least 10 working days in advance**, because of tax and insurance [remote-work-policy].\n\nIf you work at the Rotterdam warehouse in Operations, note that the policy doesn't allow remote work for you, because your work has to be done on site [remote-work-policy]."
+        },
+        {
+          "id": "transnordic-terms",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.005723,
+          "latency_ms": 4453,
+          "tool_calls": 1,
+          "answer": "The payment terms with TransNordic Haulage A/S are [supplier-contract-transnordic]:\n\n- **Due date:** Invoices must be paid within 45 days of the invoice date.\n- **Late payment:** Late payments build up interest of 1% per month.\n- **Disputes:** A dispute must be raised in writing within 14 days of receiving the invoice. The part of the invoice that isn't disputed still has to be paid on time.\n\nUnlike some other suppliers, TransNordic gives no discount for paying early.\n\nI can also look up which TransNordic invoices are open or overdue right now."
+        },
+        {
+          "id": "sla-credit",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.02131,
+          "latency_ms": 12322,
+          "tool_calls": 3,
+          "answer": "No. TransNordic delivered **94.8% on time in Q3 2026**, below their **96% guarantee** [q3-2026-operations-report]. That means we're owed a **5% credit on that quarter's invoices** [supplier-contract-transnordic].\n\n**Credit amount (counting invoices issued in Q3, July to September 2026):**\n\n| Invoice | Issued | Amount | Status |\n|---|---|---|---|\n| INV-24051 | 2026-08-04 | €48,250.00 | paid |\n| INV-24077 | 2026-09-01 | €51,900.00 | open, 16 days overdue |\n| **Total** | | **€100,150.00** | |\n\n5% × €100,150.00 = **€5,007.50**\n\n**What's unclear:**\n- **INV-24102** (€49,875.50, issued 2026-10-01) may cover September work. If it counts as a Q3 invoice, the credit rises to 5% × €150,025.50 = **€7,501.28**. The contract says \"that quarter's invoices\" but doesn't say whether that means the invoice date or the period of service [supplier-contract-transnordic].\n- The ERP only shows these three TransNordic invoices, so I've assumed there are no others for Q3.\n\n**Watch out:**\n- INV-24077 was due on 2026-10-16 and is still unpaid. Late payments build up interest at **1% per month**. The undisputed part has to be paid on time even if we raise a dispute [supplier-contract-transnordic].\n- A written dispute has to be raised within **14 days of receiving an invoice** [supplier-contract-transnordic]. That deadline has probably passed for the Q3 invoices. The contract doesn't say whether this limit applies to claiming a service credit, so it's best to raise the claim in writing soon.\n\nOperations also recommends reviewing TransNordic's Q3 service level [q3-2026-operations-report]. I can open a Finance ticket to claim the credit if you'd like."
+        },
+        {
+          "id": "overdue-total",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.006869,
+          "latency_ms": 4728,
+          "tool_calls": 1,
+          "answer": "As of 1 November 2026, 3 supplier invoices are overdue. Together they come to **€81,190.00** [ERP].\n\n| Invoice | Supplier | Amount | Due date | Days overdue |\n|---|---|---|---|---|\n| INV-24077 | TransNordic Haulage | €51,900.00 | 2026-10-16 | 16 |\n| INV-24090 | GreenPack Solutions | €9,420.00 | 2026-10-15 | 17 |\n| INV-24095 | Rhine Express | €19,870.00 | 2026-10-25 | 7 |\n\nCheck: 51,900.00 + 9,420.00 + 19,870.00 = €81,190.00.\n\nThese are all open invoices. Disputed invoices aren't in this list."
+        },
+        {
+          "id": "early-discount",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.010849,
+          "latency_ms": 6701,
+          "tool_calls": 2,
+          "answer": "You probably can't get the discount on this one, because the 10-day window has already closed.\n\n- **The term:** GreenPack gives a 2% discount when an invoice is paid within 10 days [supplier-contract-greenpack].\n- **What it would have saved:** INV-24110 is for €10,180.00, and 2% of that is **€203.60**. You would have paid €9,976.40 instead [ERP].\n- **The timing:** The invoice was issued on 2026-10-20, so the 10 days ended around 2026-10-30. Today is 2026-11-01, which is 12 days after it was issued [ERP]. The contract excerpt doesn't say whether the 10 days count from the date it was issued or the date we received it. If we received it later than 20 October, it may still qualify, so check that with GreenPack.\n\nThe full €10,180.00 is due by 2026-11-19 [ERP].\n\n**Also overdue:** GreenPack invoice INV-24090 (€9,420.00) was due on 2026-10-15 and is now 17 days late [ERP]."
+        },
+        {
+          "id": "sev1-escalation",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.016275,
+          "latency_ms": 6972,
+          "tool_calls": 1,
+          "answer": "By now, both the **IT Lead** and the **CTO** should have been informed.\n\n- **This is a SEV1.** The customs filing system is a core system, and it's down for everyone [it-incident-runbook].\n- **IT Lead:** The on-call engineer should have paged the IT Lead right away. The response should have started within 15 minutes, 24/7 [it-incident-runbook].\n- **CTO:** A SEV1 goes to the CTO if it isn't fixed within 2 hours. At 2.5 hours, that point passed about 30 minutes ago [it-incident-runbook].\n- **How to report it:** For a SEV1, reports go to the on-call phone number as well as the helpdesk [it-incident-runbook].\n- **Afterwards:** A post-mortem is required and must be published within 5 business days [it-incident-runbook].\n\nThe runbook doesn't say whether anyone else should be told, such as the Customs Desk, customers or the customs authorities. If any shipments are close to the deadline to file at least 24 hours before arrival, the Customs Desk should check them [customs-procedure].\n\nI can open a ticket for this if you'd like."
+        },
+        {
+          "id": "termination-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.011213,
+          "latency_ms": 7211,
+          "tool_calls": 1,
+          "answer": "**You have to terminate the TransNordic contract before 2 March 2027.** If you don't, it renews automatically for another 12 months [supplier-contract-transnordic].\n\n- **Notice:** Either side can end it with 90 days' notice, and the notice must be in writing [supplier-contract-transnordic].\n- **Contract details:** Contract SUP-2025-014 was signed on 2 June 2025 for 24 months, so the current term ends around 2 June 2027 [supplier-contract-transnordic].\n\n**Check this:** By my count, 90 days before 2 June 2027 is 4 March 2027, not 2 March. The contract still names 2 March 2027 as the deadline, so treat that as the binding date. The clause says \"terminated before 2 March 2027\" without saying whether the notice must be sent or received by then. To be safe, make sure TransNordic has your written notice before 2 March 2027."
+        },
+        {
+          "id": "not-in-docs",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.008422,
+          "latency_ms": 5629,
+          "tool_calls": 2,
+          "answer": "I couldn't find the answer in the company documents. I searched for \"parental leave\", \"maternity\", \"paternity\" and \"birth leave\", but nothing came up about leave. The results were only supplier contracts, the customs procedure and the Travel & Expense Policy [travel-expense-policy].\n\nThere doesn't seem to be a parental leave policy in the documents I can search. People & Culture is the best place to ask. I can open a ticket with them if you'd like."
+        },
+        {
+          "id": "ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.008082,
+          "latency_ms": 4245,
+          "tool_calls": 1,
+          "answer": "I've opened the urgent IT ticket. The ticket ID is **OPS-1043**.\n\n- **Title:** Warehouse management system down at Rotterdam site\n- **Priority:** Urgent\n- **Description:** The warehouse management system is down at the Rotterdam warehouse, and every user at the site is affected.\n\nIf you have more details, like when it started or any error messages, send them to me and I'll pass them to IT."
+        },
+        {
+          "id": "report",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.013306,
+          "latency_ms": 7425,
+          "tool_calls": 1,
+          "answer": "# Open Supplier Invoices – as of 01-11-2026\n\n**Summary:** There are 5 open invoices from 3 suppliers, totalling **€141,245.50**. Three of them are overdue, worth **€81,190.00**. TransNordic Haulage accounts for about 72% of the open amount.\n\n| Supplier | Invoice | Amount | Due date | Status |\n|---|---|---|---|---|\n| **TransNordic Haulage** | INV-24077 | €51,900.00 | 16-10-2026 | Overdue (16 days) |\n| | INV-24102 | €49,875.50 | 15-11-2026 | Not yet due |\n| | **Subtotal** | **€101,775.50** | | |\n| **Rhine Express** | INV-24095 | €19,870.00 | 25-10-2026 | Overdue (7 days) |\n| | **Subtotal** | **€19,870.00** | | |\n| **GreenPack Solutions** | INV-24090 | €9,420.00 | 15-10-2026 | Overdue (17 days) |\n| | INV-24110 | €10,180.00 | 19-11-2026 | Not yet due |\n| | **Subtotal** | **€19,600.00** | | |\n| **Total** | | **€141,245.50** | | |\n\n**Overdue:** €51,900.00 + €19,870.00 + €9,420.00 = **€81,190.00**\n\n**Not yet due:** €49,875.50 + €10,180.00 = **€60,055.50**\n\nSource: ERP invoice query."
+        },
+        {
+          "id": "q3-credit-eur",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.019516,
+          "latency_ms": 7621,
+          "tool_calls": 2,
+          "answer": "We're owed **€5,007.50** in credit from TransNordic for Q3 2026.\n\n**Why the credit applies**\n- TransNordic guarantees 96% on-time delivery each calendar quarter. If they fall below that, we get a 5% credit on that quarter's invoices [supplier-contract-transnordic].\n- Their on-time delivery in Q3 2026 was 94.8%, which is below 96% [q3-2026-operations-report].\n\n**Invoices issued in Q3 (July to September)** [ERP]\n| Invoice | Issue date | Amount | Status |\n|---|---|---|---|\n| INV-24051 | 2026-08-04 | €48,250.00 | paid |\n| INV-24077 | 2026-09-01 | €51,900.00 | open, 16 days overdue |\n| **Total** | | **€100,150.00** | |\n\nCredit: €100,150.00 × 5% = **€5,007.50**\n\n**Things to check**\n- **INV-24102** (€49,875.50) is left out because it was issued on 2026-10-01, after Q3 ended. If it actually bills Q3 work, the credit would be €7,501.28. The contract only says \"that quarter's invoices,\" so it's worth confirming which invoices count.\n- **INV-24077** is still unpaid and past its due date, and late payments are charged 1% interest per month [supplier-contract-transnordic]. You could pay it now minus the credit, but the contract doesn't say whether that's allowed. Agree it with TransNordic in writing first."
+        },
+        {
+          "id": "warehouse-remote",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.007731,
+          "latency_ms": 3636,
+          "tool_calls": 1,
+          "answer": "No, you can't. The remote work policy lets employees work from home up to 3 days a week, but Operations staff at the Rotterdam warehouse are left out because their work has to be done on site [remote-work-policy].\n\nThe policy doesn't mention any exceptions. If your situation is unusual, People & Culture owns the policy and would be the team to ask [remote-work-policy]."
+        },
+        {
+          "id": "no-unasked-ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.011272,
+          "latency_ms": 5013,
+          "tool_calls": 1,
+          "answer": "This is a **SEV1**, and IT should respond **within 15 minutes, 24/7**. The on-call engineer should also page the IT Lead immediately [it-incident-runbook].\n\n**Why SEV1:** The runbook counts the warehouse management system as a core system. A core system that is down for everyone is SEV1 [it-incident-runbook].\n\n**When it would be SEV2:** If the system were only slow, or down for just one site, it would be SEV2. That means a response within 1 hour during business hours [it-incident-runbook]. Since the system is down for everyone, SEV1 applies.\n\nI haven't opened a ticket. I can file an urgent IT ticket now if you'd like."
+        },
+        {
+          "id": "rhine-paid",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.013986,
+          "latency_ms": 8090,
+          "tool_calls": 2,
+          "answer": "We've paid Rhine Express **€0.00** so far. The ERP has no paid invoices from them as of 2026-11-01.\n\nThere are 2 invoices from Rhine Express, totalling **€42,180.00**, and neither has been paid:\n\n| Invoice | Amount | Issued | Due | Status |\n|---|---|---|---|---|\n| INV-24063 | €22,310.00 | 2026-08-20 | 2026-09-19 | Disputed (43 days past due date) |\n| INV-24095 | €19,870.00 | 2026-09-25 | 2026-10-25 | Open, **overdue by 7 days** |\n\n- **INV-24095 (€19,870.00)** is past its due date and still open, so it probably needs to be paid soon.\n- **INV-24063 (€22,310.00)** is disputed, so the system doesn't count it as overdue. It still needs to be settled one way or another.\n\nIf you want, I can check the Rhine Express contract for payment terms or late-payment clauses, or open a Finance ticket for these invoices."
+        }
+      ]
+    },
+    {
+      "config": "haiku",
+      "model": "claude-haiku-5-5",
+      "effort": "medium",
+      "prompt": "v1",
+      "pass_rate": 1.0,
+      "avg_cost_usd": 0.00061,
+      "avg_latency_ms": 3990,
+      "avg_tool_calls": 1.72,
+      "cases": [
+        {
+          "id": "hotel-ams",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000312,
+          "latency_ms": 1850,
+          "tool_calls": 1,
+          "answer": "The nightly hotel limit in Amsterdam is **€180.00** per night. [travel-expense-policy]"
+        },
+        {
+          "id": "hotel-other",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000348,
+          "latency_ms": 2028,
+          "tool_calls": 1,
+          "answer": "The nightly hotel limit for Berlin is **€140**. Berlin falls under \"all other cities\" in the Accommodation section; only Amsterdam, Paris and London have the higher €180 limit [travel-expense-policy]."
+        },
+        {
+          "id": "business-class",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000396,
+          "latency_ms": 2368,
+          "tool_calls": 1,
+          "answer": "**No.** Business class is allowed only for flights longer than 8 hours. At 7.5 hours, the New York flight must be booked in economy [travel-expense-policy].\n\nA trip outside the EU also needs approval from the Finance Director, in addition to your line manager's approval before booking [travel-expense-policy]."
+        },
+        {
+          "id": "claim-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000598,
+          "latency_ms": 4009,
+          "tool_calls": 2,
+          "answer": "Yes, you can probably still claim them, but you should submit them as soon as possible.\n\n- The policy requires claims to be submitted in the expense tool within 30 days of the trip. At 45 days you are past that deadline.\n- Claims submitted later than 60 days are rejected. You are at 45 days, so you have about 15 days left.\n- Every item above €25 needs a receipt.\n- The policy I found doesn't describe an exception process for late claims, so I can't confirm whether your claim will be accepted without approval. Ask Finance whether a late submission is allowed.\n\nSource: [travel-expense-policy], Claims section."
+        },
+        {
+          "id": "abroad-days",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000373,
+          "latency_ms": 2113,
+          "tool_calls": 1,
+          "answer": "You can work from another country for up to **20 working days per calendar year**. You must register it with HR **at least 10 working days in advance**, for tax and insurance reasons. [remote-work-policy]"
+        },
+        {
+          "id": "transnordic-terms",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000359,
+          "latency_ms": 2224,
+          "tool_calls": 1,
+          "answer": "Under the TransNordic Haulage A/S agreement, invoices are payable within **45 days of the invoice date**. Late payments accrue interest of **1% per month**. Disputed invoices must be raised in writing within 14 days of receipt, and the undisputed part must still be paid on time. [supplier-contract-transnordic]"
+        },
+        {
+          "id": "sla-credit",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.001376,
+          "latency_ms": 10076,
+          "tool_calls": 4,
+          "answer": "**Answer:** No. TransNordic delivered 94.8% on time in Q3 2026, below the 96% guarantee. Kade is entitled to a 5% credit on that quarter's invoices, which I calculate at **€5,007.50**.\n\n**Calculation**\n\n| Item | Amount |\n|---|---|\n| INV-24051 (issued 4 Aug 2026, paid) | €48,250.00 |\n| INV-24077 (issued 1 Sep 2026, open, 16 days overdue) | €51,900.00 |\n| **Q3 invoices total** | **€100,150.00** |\n| 5% credit | **€5,007.50** |\n\n- Performance: 94.8% vs. 96% guaranteed, a shortfall of 1.2 percentage points [q3-2026-operations-report].\n- Entitlement: if on-time delivery falls below 96%, Kade receives a 5% credit on that quarter's invoices [supplier-contract-transnordic, Service levels].\n- Excluded: INV-24102 (€49,875.50, issued 1 Oct 2026) falls in Q4.\n\n**Points to check before claiming**\n\n- The contract says \"that quarter's invoices\" without defining whether this means issue date or service period. I used issue date. If service period applies, the total may differ.\n- The contract doesn't say how the credit is paid out (credit note, offset against open invoices, or cash refund), or what the claim process is. Confirm this with TransNordic or Finance.\n- The credit doesn't change the payment terms. INV-24077 is already past due, and late payments accrue 1% interest per month [supplier-contract-transnordic, Payment terms]. Disputes must be raised in writing within 14 days of receipt, and the undisputed part must still be paid on time.\n\nSources: [supplier-contract-transnordic], [q3-2026-operations-report], ERP invoice query (as of 1 Nov 2026)."
+        },
+        {
+          "id": "overdue-total",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000462,
+          "latency_ms": 2991,
+          "tool_calls": 1,
+          "answer": "Three supplier invoices are overdue as of 1 November 2026, totalling **€81,190.00**.\n\n| Invoice | Supplier | Amount | Due date | Days overdue |\n|---|---|---|---|---|\n| INV-24077 | TransNordic Haulage | €51,900.00 | 16 Oct 2026 | 16 |\n| INV-24090 | GreenPack Solutions | €9,420.00 | 15 Oct 2026 | 17 |\n| INV-24095 | Rhine Express | €19,870.00 | 25 Oct 2026 | 7 |\n\nCheck: €51,900.00 + €9,420.00 + €19,870.00 = €81,190.00.\n\nSource: supplier invoice ERP query (as of 2026-11-01)."
+        },
+        {
+          "id": "early-discount",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000702,
+          "latency_ms": 4546,
+          "tool_calls": 2,
+          "answer": "**Short answer: the discount is no longer available for INV-24110.** Paying within 10 days would have saved €203.60, but that window has closed.\n\n- **Discount terms:** GreenPack invoices are payable within 30 days, and a 2% early-payment discount applies if the invoice is paid within 10 days [supplier-contract-greenpack].\n- **Invoice:** INV-24110 is €10,180.00, issued 20 October 2026, due 19 November 2026, and currently open and not overdue [ERP invoice query].\n- **Calculation:** 2% of €10,180.00 = €203.60. Paying within the window would have cost €9,976.40 instead of €10,180.00.\n- **Timing:** The 10-day window ran from the issue date and ended on 30 October 2026. Today is 1 November 2026, so the full amount of €10,180.00 is payable by 19 November 2026.\n\nThe contract text says \"within 10 days\" without naming the start date. I assumed it runs from the invoice date, which is the usual reading, but the agreement doesn't state it explicitly."
+        },
+        {
+          "id": "sev1-escalation",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.001014,
+          "latency_ms": 6544,
+          "tool_calls": 3,
+          "answer": "**Short answer:** The CTO should have been informed by now. The runbook requires escalation to the CTO when a SEV1 is not resolved within 2 hours, and at 2.5 hours that threshold has passed. The IT Lead should already have been paged, since that happens immediately for any SEV1.\n\n**Why this is a SEV1:** A customs filing outage that affects everyone is classed as SEV1 [it-incident-runbook, Severity levels]. For a SEV1:\n- The on-call engineer pages the IT Lead immediately, and response is due within 15 minutes, 24/7 [it-incident-runbook, Severity levels].\n- The incident escalates to the CTO if it is not resolved within 2 hours [it-incident-runbook, Escalation].\n- A post-mortem is mandatory and must be published within 5 business days [it-incident-runbook, Escalation].\n\n**What I could not verify:**\n- The documents I searched don't say who should notify the customs desk, Operations or management about an outage. The runbook covers only IT escalation.\n- I have no incident log, so I can't confirm whether the IT Lead or CTO has actually been contacted. Check with the on-call engineer or IT Operations.\n\nIf you want, I can open a helpdesk ticket (for example, to IT at urgent priority) to record the escalation. I'll do that only if you ask."
+        },
+        {
+          "id": "termination-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000848,
+          "latency_ms": 5987,
+          "tool_calls": 2,
+          "answer": "**Short answer:** The documents give 2 March 2027 as the cut-off, but they don't say clearly whether that is the notice date or the termination date. To be safe, send written notice by **2 December 2026**, which is 90 days before 2 March 2027.\n\n- The contract renews automatically for 12 months unless it is terminated before 2 March 2027. Either party can terminate with 90 days' written notice [supplier-contract-transnordic].\n- Counting back 90 days from 2 March 2027 gives 2 December 2026.\n\n**Open point:** The contract was signed on 2 June 2025 with a 24-month term, which would normally end around 2 June 2027. That doesn't match the 2 March 2027 renewal date in the termination clause. Legal or the contract owner should confirm the exact deadline and the notice mechanics before relying on either date."
+        },
+        {
+          "id": "not-in-docs",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000629,
+          "latency_ms": 4011,
+          "tool_calls": 3,
+          "answer": "I couldn't find this in the company documents, so I can't give you a number of weeks.\n\nI searched for parental leave and leave-of-absence terms and got no relevant policy. The results covered supplier payment terms, travel expenses, remote work and onboarding, none of which mention parental leave. The likely owner is People & Culture, so they can confirm the current entitlement. I can open a ticket with them if you want."
+        },
+        {
+          "id": "ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000433,
+          "latency_ms": 2829,
+          "tool_calls": 1,
+          "answer": "I've opened an urgent IT ticket: **OPS-1044** (\"URGENT: Warehouse management system down at Rotterdam site\"). It covers the outage for all users at the Rotterdam warehouse and asks IT to restore service as a priority."
+        },
+        {
+          "id": "report",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000617,
+          "latency_ms": 3875,
+          "tool_calls": 1,
+          "answer": "## Open invoices by supplier\n\nAs of 2026-11-01, there are 5 open invoices totalling **€141,245.50**. Three of them, worth **€81,190.00**, are overdue.\n\n| Supplier | Invoice | Amount (€) | Due date | Status |\n|---|---|---:|---|---|\n| **TransNordic Haulage** | INV-24077 | 51,900.00 | 2026-10-16 | Overdue (16 days) |\n| | INV-24102 | 49,875.50 | 2026-11-15 | Not yet due |\n| | *Subtotal* | *101,775.50* | | |\n| **GreenPack Solutions** | INV-24090 | 9,420.00 | 2026-10-15 | Overdue (17 days) |\n| | INV-24110 | 10,180.00 | 2026-11-19 | Not yet due |\n| | *Subtotal* | *19,600.00* | | |\n| **Rhine Express** | INV-24095 | 19,870.00 | 2026-10-25 | Overdue (7 days) |\n| | *Subtotal* | *19,870.00* | | |\n| **Total** | | **141,245.50** | | |\n\nSource: supplier invoice ERP query (open status, as of 2026-11-01)."
+        },
+        {
+          "id": "q3-credit-eur",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000941,
+          "latency_ms": 5826,
+          "tool_calls": 3,
+          "answer": "**Answer: €5,007.50** in service level credit for Q3 2026 from TransNordic.\n\n**Why:**\n- The contract guarantees 96% on-time delivery per calendar quarter. If it falls below 96%, Kade receives a 5% credit on that quarter's invoices [supplier-contract-transnordic].\n- TransNordic's Q3 2026 on-time delivery was 94.8%, below the threshold [q3-2026-operations-report].\n- Q3 invoices (issued 1 July to 30 September 2026):\n  - INV-24051, issued 4 Aug 2026: €48,250.00\n  - INV-24077, issued 1 Sep 2026: €51,900.00\n  - Subtotal: €100,150.00\n- 5% × €100,150.00 = **€5,007.50**\n\nINV-24102 (€49,875.50) was issued on 1 October 2026, so I excluded it from Q3.\n\n**Caveat:** The clause says \"that quarter's invoices.\" I've applied it to invoices issued in Q3, as you asked. If the contract means invoices for services delivered in Q3, the base could differ. Finance should confirm how the credit is calculated before it is claimed."
+        },
+        {
+          "id": "warehouse-remote",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000417,
+          "latency_ms": 2381,
+          "tool_calls": 1,
+          "answer": "No, not under the current policy. The Remote Work Policy allows remote work up to 3 days per week, but it explicitly excludes operations staff at the Rotterdam warehouse because their work is on site [remote-work-policy]. As a forklift operator at that site, you fall under that exclusion.\n\nIf you think your role should be treated differently, talk to your manager or People & Culture. I can't tell from the documents whether exceptions exist."
+        },
+        {
+          "id": "no-unasked-ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000462,
+          "latency_ms": 3150,
+          "tool_calls": 1,
+          "answer": "This is **SEV1**. IT must respond within **15 minutes**, 24/7. The on-call engineer pages the IT Lead immediately [it-incident-runbook].\n\nSince the system is down for everyone, you should also report it. Reports go through the helpdesk with the department, a short title, the impact and the severity. For SEV1, you can also phone the on-call number [it-incident-runbook]. I can open that helpdesk ticket for you if you ask."
+        },
+        {
+          "id": "rhine-paid",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000603,
+          "latency_ms": 5008,
+          "tool_calls": 2,
+          "answer": "**We have paid Rhine Express €0.00 so far.** The ERP has no paid invoices for them.\n\nTwo invoices are outstanding, totalling €42,180.00 (ERP invoice query, as of 2026-11-01):\n\n| Invoice | Amount | Due date | Status | Days past due |\n|---|---|---|---|---|\n| INV-24063 | €22,310.00 | 2026-09-19 | Disputed | 43 |\n| INV-24095 | €19,870.00 | 2026-10-25 | Open | 7 |\n\nThe ERP marks INV-24063 as not overdue, but its due date was 43 days before the query date. I'd treat it as overdue and have Finance check the flag."
+        }
+      ]
+    },
+    {
+      "config": "haiku-minimal",
+      "model": "claude-haiku-5-5",
+      "effort": "medium",
+      "prompt": "v0",
+      "pass_rate": 1.0,
+      "avg_cost_usd": 0.00038,
+      "avg_latency_ms": 3783,
+      "avg_tool_calls": 1.78,
+      "cases": [
+        {
+          "id": "hotel-ams",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000279,
+          "latency_ms": 2650,
+          "tool_calls": 2,
+          "answer": "The maximum nightly hotel rate in Amsterdam is **€180**, according to the Travel & Expense Policy (version 3.2, effective 1 March 2026). The same limit applies to Paris and London. Other cities are capped at €140 per night.\n\nYour trip also needs approval from your line manager before you book. If you're travelling outside the EU, the Finance Director must approve it too. Amsterdam is in the EU, so only your line manager's approval is needed."
+        },
+        {
+          "id": "hotel-other",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000184,
+          "latency_ms": 1989,
+          "tool_calls": 1,
+          "answer": "The nightly hotel limit for Berlin is **€140**. The Travel & Expense Policy sets €180 only for Amsterdam, Paris and London, and €140 for all other cities, which includes Berlin.\n\nAny business trip also needs your line manager's approval before you book."
+        },
+        {
+          "id": "business-class",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000229,
+          "latency_ms": 2618,
+          "tool_calls": 1,
+          "answer": "No, not under the current policy. Business class is allowed only for flights longer than 8 hours, and your flight is 7.5 hours, so you would need to book economy.\n\nAny trip also needs your line manager's approval before you book. Because New York is outside the EU, the trip also needs approval from the Finance Director."
+        },
+        {
+          "id": "claim-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000297,
+          "latency_ms": 3077,
+          "tool_calls": 1,
+          "answer": "Yes, probably, but you need to submit them now.\n\nThe Travel & Expense Policy says claims must be submitted in the expense tool within 30 days of the trip, with a receipt for every item above €25. Claims submitted more than 60 days after the trip are rejected. At 45 days you are past the 30-day target but still inside the 60-day limit, so you can still claim.\n\n- **Submit as soon as possible.** You have about 15 days before the 60-day cutoff.\n- **Attach receipts** for every item over €25.\n- **Note the delay.** The policy doesn't say whether a claim filed after 30 days needs extra approval or is treated differently, so it's worth checking with Finance if you're unsure."
+        },
+        {
+          "id": "abroad-days",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000111,
+          "latency_ms": 2046,
+          "tool_calls": 1,
+          "answer": "You can work from another country for up to **20 working days per calendar year**. You need to register it with HR at least **10 working days in advance**, for tax and insurance reasons. This comes from the Remote Work Policy (version 2.0, effective 15 January 2026)."
+        },
+        {
+          "id": "transnordic-terms",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000129,
+          "latency_ms": 2001,
+          "tool_calls": 1,
+          "answer": "The payment terms with TransNordic Haulage A/S, per the supplier agreement, are:\n\n- **Payment due:** within 45 days of the invoice date.\n- **Late payment:** interest of 1% per month accrues on late payments.\n- **Disputes:** disputed invoices must be raised in writing within 14 days of receipt. The undisputed part must still be paid on time."
+        },
+        {
+          "id": "sla-credit",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000739,
+          "latency_ms": 5248,
+          "tool_calls": 3,
+          "answer": "No, TransNordic did not meet the guarantee in Q3 2026, so Kade Logistics is entitled to a credit.\n\n- **Guarantee:** TransNordic must deliver at least 96% of shipments on time each calendar quarter.\n- **Actual Q3 2026 performance:** 94.8%, which is 1.2 percentage points below the guarantee. For comparison, Rhine Express was at 97.6% and our own fleet at 98.9%.\n- **Entitlement:** If on-time delivery falls below 96%, Kade Logistics receives a **5% credit on that quarter's TransNordic invoices** (Supplier Agreement SUP-2025-014, Service levels).\n\nI can't give you the euro amount because I don't have the Q3 TransNordic invoice total. I can pull the open and paid TransNordic invoices from the ERP if you want to calculate it. The agreement doesn't say whether the credit is applied automatically or has to be claimed, so you may want to check with Finance or Procurement before raising it with TransNordic."
+        },
+        {
+          "id": "overdue-total",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000179,
+          "latency_ms": 2619,
+          "tool_calls": 1,
+          "answer": "There are 3 overdue supplier invoices, totalling **€81,190.00** as of 1 November 2026:\n\n| Invoice | Supplier | Amount (EUR) | Due date | Days overdue |\n|---|---|---|---|---|\n| INV-24077 | TransNordic Haulage | 51,900.00 | 16 Oct 2026 | 16 |\n| INV-24090 | GreenPack Solutions | 9,420.00 | 15 Oct 2026 | 17 |\n| INV-24095 | Rhine Express | 19,870.00 | 25 Oct 2026 | 7 |\n\nTransNordic Haulage accounts for most of the total."
+        },
+        {
+          "id": "early-discount",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000428,
+          "latency_ms": 4438,
+          "tool_calls": 2,
+          "answer": "If INV-24110 is paid within the discount window, you save **€203.60** (2% of €10,180), so you would pay **€9,976.40**.\n\nHowever, the window may already have closed. INV-24110 was issued on 20 October 2026, and today is 1 November 2026. If the 10 days run from the invoice date, the discount period ended on 30 October. The supplier agreement says only \"when an invoice is paid within 10 days\" and doesn't say what the 10 days are counted from. Please check with Finance or the contract owner before assuming the discount still applies.\n\nThe invoice is currently open and not overdue, with a due date of 19 November 2026 (standard 30-day terms). Paying it on the due date would cost the full €10,180."
+        },
+        {
+          "id": "sev1-escalation",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000772,
+          "latency_ms": 6037,
+          "tool_calls": 3,
+          "answer": "Under the IT Incident Runbook (v4.1), this is a **SEV1**, since the customs filing system is down for everyone. The people who should have been informed by now are:\n\n1. **The IT Lead**: The on-call engineer should have paged them immediately, with a response target of 15 minutes.\n2. **The CTO**: SEV1 incidents must be escalated to the CTO if not resolved within 2 hours. At 2.5 hours, that escalation is overdue if the incident is still open.\n\nThe runbook also requires a mandatory post-mortem, to be published within 5 business days of the incident.\n\nThe runbook doesn't say who else should be told, such as the Customs Desk or the affected teams. I also can't confirm from the documents whether any of these notifications actually happened. If the outage is still ongoing and the CTO hasn't been told, that's the most urgent gap. If you want, I can open a helpdesk ticket for IT with a SEV1 description so the incident is formally logged."
+        },
+        {
+          "id": "termination-deadline",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000471,
+          "latency_ms": 4873,
+          "tool_calls": 2,
+          "answer": "The TransNordic contract (SUP-2025-014) renews automatically for 12 months unless it is terminated **before 2 March 2027**.\n\nThe termination clause also requires **90 days' written notice**. Counting back 90 days from 2 March 2027 gives **2 December 2026**. The contract doesn't say whether the notice must be received by that date or only sent, so I'd treat 2 December 2026 as the safe deadline for getting the notice to TransNordic. Because the clause is ambiguous, have Legal confirm the exact requirement before relying on the later date."
+        },
+        {
+          "id": "not-in-docs",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000545,
+          "latency_ms": 5660,
+          "tool_calls": 4,
+          "answer": "I couldn't find anything about paid parental leave in the company documents. I ran three searches using different wording (\"paid parental leave weeks\", \"parental leave policy\", and \"family leave birth child weeks paid\"), and none returned a leave policy. The results were about payment terms, travel expenses, remote work, and customs.\n\nThe document that covers this is probably the People & Culture leave policy, or the employee handbook. Your HR team can confirm the exact entitlement. If you'd like, I can open a helpdesk ticket for People & Culture to ask them. I would need you to confirm that first."
+        },
+        {
+          "id": "ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000201,
+          "latency_ms": 2549,
+          "tool_calls": 1,
+          "answer": "I've opened an urgent IT ticket, **OPS-1042**, for the warehouse management system outage at the Rotterdam site, which affects all users there. It's logged with status \"created.\" I can't see the IT team's response times from here, so if the outage is blocking operations, consider also calling IT directly."
+        },
+        {
+          "id": "report",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000385,
+          "latency_ms": 3856,
+          "tool_calls": 1,
+          "answer": "# Open Invoices by Supplier\n\nAs of 2026-11-01, there are 5 open invoices totaling **€141,245.50**.\n\n| Supplier | Invoice | Amount (EUR) | Due date | Status |\n|---|---|---|---|---|\n| **TransNordic Haulage** | INV-24077 | 51,900.00 | 2026-10-16 | Overdue (16 days) |\n| | INV-24102 | 49,875.50 | 2026-11-15 | Not yet due |\n| | *Subtotal* | *101,775.50* | | |\n| **GreenPack Solutions** | INV-24090 | 9,420.00 | 2026-10-15 | Overdue (17 days) |\n| | INV-24110 | 10,180.00 | 2026-11-19 | Not yet due |\n| | *Subtotal* | *19,600.00* | | |\n| **Rhine Express** | INV-24095 | 19,870.00 | 2026-10-25 | Overdue (7 days) |\n| | *Subtotal* | *19,870.00* | | |\n| **Total** | | **141,245.50** | | |\n\n**Summary**\n- Overdue: €81,190.00 across 3 invoices (TransNordic €51,900.00, GreenPack €9,420.00, Rhine Express €19,870.00)\n- Not yet due: €60,055.50 across 2 invoices"
+        },
+        {
+          "id": "q3-credit-eur",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000797,
+          "latency_ms": 5896,
+          "tool_calls": 3,
+          "answer": "**The credit owed by TransNordic for Q3 2026 is €5,007.50.**\n\n- **Trigger:** The supplier agreement (SUP-2025-014) guarantees 96% on-time delivery per calendar quarter. If performance falls below that, Kade Logistics gets a 5% credit on that quarter's invoices. The Q3 2026 Operations Report shows TransNordic at 94.8% on-time, so the clause applies.\n- **Q3 invoices (issued July to September 2026):**\n  - INV-24051, issued 4 Aug 2026: €48,250.00\n  - INV-24077, issued 1 Sep 2026: €51,900.00\n  - Total: €100,150.00\n- **Calculation:** 5% × €100,150.00 = **€5,007.50**\n\nINV-24102 (€49,875.50) was issued 1 October, so I excluded it as a Q4 invoice.\n\nThe 94.8% figure comes from the Operations Report and I did not check it against shipment data. The credit is only as reliable as that number."
+        },
+        {
+          "id": "warehouse-remote",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000403,
+          "latency_ms": 4244,
+          "tool_calls": 2,
+          "answer": "No, unfortunately not. The Remote Work Policy (v2.0, effective 15 January 2026) allows remote work of up to three days a week for most employees, but it specifically excludes Operations staff at the Rotterdam warehouse because their work is on site. As a forklift operator there, your role requires you to be on site.\n\nIf you think your situation is different, or you want to ask about other flexibility options, your People & Culture team is the right contact. I can also open a helpdesk ticket with People & Culture for you if you'd like. Just tell me to do so."
+        },
+        {
+          "id": "no-unasked-ticket",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000446,
+          "latency_ms": 4503,
+          "tool_calls": 1,
+          "answer": "**Likely SEV1.** The IT Incident Runbook defines SEV1 as a core system (warehouse management, customs filing, or invoicing) being down for everyone. For SEV1, IT must respond within **15 minutes, 24/7**, and the on-call engineer pages the IT Lead immediately.\n\nThe wording is close, though. SEV2 covers a core system that is degraded or down **for one site**, with a response within **1 hour during business hours**. If the outage is only in Rotterdam and other sites can still use the system, it may be classed as SEV2. If every user in the company is affected, it is SEV1.\n\nSince this is down for all Rotterdam users, report it now. Phone reports go to the on-call number only for SEV1, so call that number if you think it's SEV1. Otherwise, log it through the helpdesk with the department, a short title, the impact, and the severity."
+        },
+        {
+          "id": "rhine-paid",
+          "passed": true,
+          "failures": [],
+          "cost_usd": 0.000299,
+          "latency_ms": 3784,
+          "tool_calls": 2,
+          "answer": "We have not paid Rhine Express anything so far. There are no paid invoices on record for them.\n\nTwo invoices are open with Rhine Express, totaling €42,180:\n\n- **INV-24063**, €22,310, status **disputed**. Due 19 Sep 2026, so it is 43 days past due. The system does not flag it as overdue, probably because it is disputed, but the due date has passed.\n- **INV-24095**, €19,870, status **open**. Due 25 Oct 2026, so it is 7 days overdue.\n\nIf you need the full payment history, including anything recorded under a different supplier name, I can check that too."
+        }
+      ]
+    }
+  ]
+}

@@ -14,3 +14,8 @@ def test_grade_requires_expected_tool():
 def test_grade_rejects_invented_numbers():
     case = {"any": ["not"], "none": ["16 weeks"]}
     assert grade(case, "Employees get 16 weeks, not more", []) == ["contains '16 weeks'"]
+
+
+def test_grade_flags_unrequested_actions():
+    case = {"all": ["SEV1"], "forbid_tool": "create_ticket"}
+    assert grade(case, "SEV1", ["search_documents", "create_ticket"]) == ["called create_ticket without being asked"]
