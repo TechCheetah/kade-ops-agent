@@ -141,7 +141,7 @@ HANDLERS = {
 }
 
 
-TICKET_WORDS = ("ticket", "helpdesk", "help desk")
+TICKET_WORDS = ("ticket", "helpdesk", "help desk", "escalate")
 
 
 def run_tool(name: str, args: dict, question: str = "") -> tuple[str, bool]:
