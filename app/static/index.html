@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kade Ops Agent</title>
+<title>Kade Ops Desk</title>
 <meta name="description" content="An internal operations agent with retrieval, ERP tools, tracing and evals. Built by Eugenio Díaz.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 18 18%22%3E%3Crect width=%2218%22 height=%2218%22 fill=%22%235e6ad2%22/%3E%3Crect x=%226%22 y=%224%22 width=%226%22 height=%2210%22 fill=%22%23ffffff%22/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 18 18%22%3E%3Crect width=%2218%22 height=%2218%22 fill=%22%23f7f8f8%22/%3E%3Crect x=%226%22 y=%224%22 width=%226%22 height=%2210%22 fill=%22%23010102%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 <style>
@@ -19,7 +19,7 @@
   --ink: #f7f8f8; --body: #d0d6e0; --muted: #8a8f98; --faint: #62666d;
   --volt: #5e6ad2; --volt-hover: #828fff; --volt-soft: rgba(94, 106, 210, .14); --on-volt: #ffffff;
   --ok: #27a644; --bad: #e5484d; --tool: #8a8f98;
-  --sans: "Geist", -apple-system, "SF Pro Text", system-ui, sans-serif;
+  --sans: "Schibsted Grotesk", -apple-system, system-ui, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
   --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
   --col: 760px;
@@ -35,8 +35,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
 header { position: sticky; top: 0; z-index: 10; background: rgba(1, 1, 2, .92); border-bottom: 1px solid var(--line); }
 .bar { max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 56px; display: flex; align-items: center; gap: 28px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; letter-spacing: -.2px; white-space: nowrap; }
-.mark { width: 20px; height: 20px; border-radius: 5px; background: linear-gradient(135deg, var(--volt-hover), var(--volt)); display: grid; place-items: center; }
-.mark i { width: 6px; height: 10px; border-radius: 1.5px; background: var(--on-volt); display: block; }
+.wordmark { font-weight: 700; letter-spacing: 2.5px; font-size: 14px; color: var(--ink); padding-right: 12px; border-right: 1px solid var(--line-strong); }
+.product { font-weight: 500; color: var(--body); }
 nav.tabs { display: flex; gap: 22px; height: 100%; }
 nav.tabs button { background: none; border: 0; color: var(--muted); border-bottom: 2px solid transparent; font-weight: 500; font-size: 14px; padding: 0; }
 nav.tabs button:hover { color: var(--body); }
@@ -52,15 +52,17 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 /* Empty state */
 .welcome { padding: 9vh 0 32px; }
-.welcome h1 { margin: 0 0 12px; color: var(--ink); font-size: 36px; line-height: 1.12; letter-spacing: -1.1px; font-weight: 600; }
-.welcome h1 em { font-style: normal; background: linear-gradient(90deg, var(--volt-hover), #b4baff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.welcome p { margin: 0; max-width: 600px; color: var(--muted); }
-.welcome .fine { margin-top: 12px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
-.suggest { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 32px; }
-.suggest button { text-align: left; background: var(--soft); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: border-color .15s, background .15s; }
-.suggest button:hover { background: var(--card); border-color: var(--line-strong); }
-.suggest small { font-size: 12px; color: var(--muted); font-weight: 500; }
-.suggest span { color: var(--body); font-size: 14px; line-height: 1.45; }
+.welcome h1 { margin: 0 0 12px; color: var(--ink); font-size: 32px; line-height: 1.15; letter-spacing: -.6px; font-weight: 600; }
+.welcome p { margin: 0; max-width: 620px; color: var(--body); }
+.welcome .fine { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.suggest { margin-top: 40px; border-top: 1px solid var(--line-strong); }
+.suggest-head { font-size: 13px; color: var(--muted); padding: 12px 0 8px; }
+.suggest button { width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); padding: 13px 4px; display: grid; grid-template-columns: 96px 1fr 16px; gap: 16px; align-items: baseline; }
+.suggest button .icon { color: var(--faint); align-self: center; }
+.suggest button:hover span { color: var(--ink); }
+.suggest button:hover .icon { color: var(--body); }
+.suggest small { font-size: 13px; color: var(--muted); }
+.suggest span { color: var(--body); font-size: 15px; line-height: 1.45; }
 
 /* Conversation */
 .thread { padding: 28px 0 24px; display: flex; flex-direction: column; gap: 28px; }
@@ -112,7 +114,7 @@ main { flex: 1; display: flex; flex-direction: column; }
 
 /* Composer */
 .composer-wrap { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--canvas) 24px); padding: 24px 0 16px; }
-.composer { display: flex; align-items: flex-end; gap: 8px; background: var(--soft); border: 1px solid var(--line-strong); border-radius: var(--r-lg); padding: 8px 8px 8px 16px; box-shadow: 0 8px 30px rgba(0, 0, 0, .45); transition: border-color .15s; }
+.composer { display: flex; align-items: flex-end; gap: 8px; background: var(--soft); border: 1px solid var(--line-strong); border-radius: var(--r-md); padding: 8px 8px 8px 16px; transition: border-color .15s; }
 .composer:focus-within { border-color: var(--volt); }
 .composer textarea { flex: 1; resize: none; background: transparent; border: 0; outline: none; color: var(--ink); font: 15px/1.5 var(--sans); padding: 6px 0; max-height: 180px; }
 .composer textarea::placeholder { color: var(--faint); }
@@ -168,15 +170,15 @@ section[hidden] { display: none !important; }
 .matrix th { color: var(--muted); font-weight: 500; }
 .pass { color: var(--ok); } .fail { color: var(--bad); cursor: help; }
 .note { color: var(--muted); font-size: 13px; margin-top: 16px; }
-.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.how div { background: var(--soft); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; }
-.how h3 { margin: 0 0 8px; color: var(--ink); font-size: 15px; font-weight: 600; }
-.how p { margin: 0; font-size: 14px; color: var(--muted); }
+.how { max-width: 900px; border-top: 1px solid var(--line-strong); }
+.how div { display: grid; grid-template-columns: 180px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.how h3 { margin: 0; color: var(--ink); font-size: 15px; font-weight: 600; }
+.how p { margin: 0; font-size: 15px; color: var(--body); }
 .how code { font-family: var(--mono); font-size: 12.5px; color: var(--volt-hover); }
 
 #tab-chat { display: flex; flex-direction: column; flex: 1; }
 
-@media (max-width: 900px) { .how { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .how div { grid-template-columns: 1fr; gap: 6px; } }
 @media (max-width: 640px) {
   .bar { gap: 16px; padding: 0 16px; }
   .col { padding: 0 16px; }
@@ -186,7 +188,8 @@ section[hidden] { display: none !important; }
   .new-chat span { display: none; }
   .welcome { padding-top: 5vh; }
   .welcome h1 { font-size: 27px; }
-  .suggest { grid-template-columns: 1fr; }
+  .suggest button { grid-template-columns: 1fr 16px; gap: 2px 12px; }
+  .suggest small { grid-column: 1 / -1; }
   .totals { grid-template-columns: repeat(2, 1fr); }
   .totals div:nth-child(2) { border-right: 0; }
   .totals div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
@@ -209,7 +212,7 @@ section[hidden] { display: none !important; }
 
 <header>
   <div class="bar">
-    <div class="brand"><span class="mark"><i></i></span>Kade Ops Agent</div>
+    <div class="brand"><span class="wordmark">KADE</span><span class="product">Ops desk</span></div>
     <nav class="tabs" role="tablist">
       <button role="tab" aria-selected="true" data-tab="chat">Chat</button>
       <button role="tab" aria-selected="false" data-tab="evals">Evals</button>
@@ -224,17 +227,17 @@ section[hidden] { display: none !important; }
   <section id="tab-chat">
     <div class="col" style="flex:1">
       <div class="welcome" id="welcome">
-        <h1>Ask Kade's <em>operations agent</em>.</h1>
-        <p>It looks things up in Kade's policies, supplier contracts and ERP before answering, and tells you where each fact came from. It can also write short reports and open helpdesk tickets. Kade Logistics is a made-up freight forwarder, and every document and invoice here was invented for the demo.</p>
-        <p class="fine" id="facts"></p>
-        <div class="suggest" id="suggest"></div>
+        <h1>What do you need?</h1>
+        <p>Ask about travel and expenses, supplier contracts, open invoices or IT incidents. Answers come from Kade's own documents and the ERP, with the source next to each fact. The desk can also put together a short report or open a ticket for you.</p>
+        <p class="fine">Kade Logistics is a made-up freight forwarder. Every document and invoice here was invented for this demo.</p>
+        <div class="suggest" id="suggest"><div class="suggest-head">Common questions</div></div>
       </div>
       <div class="thread" id="thread" aria-live="polite"></div>
     </div>
     <div class="composer-wrap">
       <div class="col">
         <form class="composer" id="composer">
-          <textarea id="q" rows="1" maxlength="1000" placeholder="Ask about a policy, a contract, an invoice…" aria-label="Message"></textarea>
+          <textarea id="q" rows="1" maxlength="1000" placeholder="Ask the ops desk…" aria-label="Message"></textarea>
           <button class="send" id="send" type="submit" aria-label="Send" disabled><svg class="icon"><use href="#i-send"/></svg></button>
         </form>
         <div class="hint">Enter to send · Shift+Enter for a new line</div>
@@ -267,10 +270,11 @@ section[hidden] { display: none !important; }
 
 <script>
 const SUGGESTIONS = [
-  ["Policy", "Can I fly business class to New York? The flight is 7.5 hours."],
-  ["Contract + report + ERP", "How much credit are we owed by TransNordic for Q3 2026 under the service level clause?"],
-  ["Report", "Write a short report of all open invoices grouped by supplier, with totals."],
-  ["Action", "Open an urgent IT ticket: the warehouse management system is down in Rotterdam for everyone."],
+  ["Travel", "Can I fly business class to New York? The flight is 7.5 hours."],
+  ["Finance", "How much credit are we owed by TransNordic for Q3 2026 under the service level clause?"],
+  ["Finance", "Write a short report of all open invoices grouped by supplier, with totals."],
+  ["People", "I work in the Rotterdam warehouse. Can I work from home two days a week?"],
+  ["IT", "Open an urgent IT ticket: the warehouse management system is down in Rotterdam for everyone."],
 ];
 const TOOL_UI = {
   search_documents: { icon: "i-search", verb: "Searched documents", arg: (i) => `"${i.query}"` },
@@ -291,13 +295,12 @@ let busy = false;
 
 fetch("/api/meta").then((r) => r.json()).then((m) => {
   docs = Object.fromEntries(m.documents.map((d) => [d.doc_id, d.title]));
-  $("facts").textContent = `${m.documents.length} documents · ${m.chunks} indexed sections · ${m.invoices} ERP invoices · 4 tools · ${m.model}`;
 });
 
 for (const [kind, text] of SUGGESTIONS) {
   const b = document.createElement("button");
   b.type = "button";
-  b.innerHTML = `<small>${esc(kind)}</small><span>${esc(text)}</span>`;
+  b.innerHTML = `<small>${esc(kind)}</small><span>${esc(text)}</span>${icon("i-chev")}`;
   b.onclick = () => send(text);
   $("suggest").append(b);
 }
