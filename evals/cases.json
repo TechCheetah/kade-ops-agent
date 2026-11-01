@@ -1,0 +1,16 @@
+[
+  {"id": "hotel-ams", "q": "What's the maximum I can spend per night on a hotel in Amsterdam?", "all": ["180"], "tool": "search_documents"},
+  {"id": "hotel-other", "q": "What is the nightly hotel limit for a business trip to Berlin?", "all": ["140"], "tool": "search_documents"},
+  {"id": "business-class", "q": "Can I fly business class to New York? The flight is 7.5 hours.", "all": ["8 hours"], "any": ["no", "not allowed", "economy"], "tool": "search_documents"},
+  {"id": "claim-deadline", "q": "I forgot to submit my expenses from a trip 45 days ago. Can I still claim them?", "all": ["60"], "any": ["yes", "still", "can"], "tool": "search_documents"},
+  {"id": "abroad-days", "q": "How many days a year can I work from another country, and how far ahead do I need to tell HR?", "all": ["20", "10"], "tool": "search_documents"},
+  {"id": "transnordic-terms", "q": "What are the payment terms with TransNordic?", "all": ["45"], "tool": "search_documents"},
+  {"id": "sla-credit", "q": "Did TransNordic meet their on-time delivery guarantee in Q3 2026, and if not, what are we entitled to?", "all": ["94.8", "96", "5%"], "tool": "search_documents"},
+  {"id": "overdue-total", "q": "Which supplier invoices are overdue right now and what's the total?", "all": ["INV-24077", "INV-24090", "INV-24095", "81190"], "tool": "query_invoices"},
+  {"id": "early-discount", "q": "If we pay GreenPack invoice INV-24110 within 10 days, how much do we save?", "all": ["203.60"], "tool": "query_invoices"},
+  {"id": "sev1-escalation", "q": "The customs filing system has been down for everyone for 2.5 hours. Who should have been informed by now?", "all": ["CTO"], "tool": "search_documents"},
+  {"id": "termination-deadline", "q": "By when do we have to cancel the TransNordic contract to stop it renewing?", "any": ["2 march 2027", "march 2, 2027", "2027-03-02"], "tool": "search_documents"},
+  {"id": "not-in-docs", "q": "How many weeks of paid parental leave do employees get?", "any": ["not", "no information", "doesn't", "don't", "couldn't", "no policy"], "none": ["16 weeks", "12 weeks", "6 weeks"], "tool": "search_documents"},
+  {"id": "ticket", "q": "Please open an urgent IT ticket: the warehouse management system is down at the Rotterdam site for everyone.", "all": ["OPS-"], "tool": "create_ticket"},
+  {"id": "report", "q": "Write a short report of all open invoices grouped by supplier, with totals.", "all": ["TransNordic", "GreenPack", "Rhine", "141245.50"], "tool": "query_invoices"}
+]

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kade Ops Agent</title>
+<meta name="description" content="An internal operations agent with retrieval, ERP tools, tracing and evals. Built by Eugenio Díaz.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 18 18%22%3E%3Crect width=%2218%22 height=%2218%22 fill=%22%23faff69%22/%3E%3Crect x=%226%22 y=%224%22 width=%226%22 height=%2210%22 fill=%22%230a0a0a%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<style>
+:root {
+  --canvas: #0a0a0a; --soft: #121212; --card: #1a1a1a; --raised: #242424;
+  --line: #2a2a2a; --line-strong: #3a3a3a;
+  --ink: #ffffff; --body: #cccccc; --muted: #888888; --faint: #5a5a5a;
+  --volt: #faff69; --on-volt: #0a0a0a;
+  --ok: #22c55e; --bad: #ef4444; --tool: #7dd3fc;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--canvas); color: var(--body); font: 15px/1.55 var(--sans); }
+a { color: var(--ink); }
+button { font: inherit; cursor: pointer; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+header { border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 700; letter-spacing: -.2px; }
+.mark { width: 18px; height: 18px; background: var(--volt); display: grid; place-items: center; }
+.mark i { width: 6px; height: 10px; background: var(--on-volt); display: block; }
+.byline { font-size: 13px; color: var(--muted); }
+.byline a { color: var(--body); text-decoration-color: var(--faint); text-underline-offset: 3px; }
+
+nav.tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--line); }
+nav.tabs button { background: none; border: 0; color: var(--muted); padding: 14px 0; border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--volt); }
+
+.intro { padding: 40px 0 28px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
+.intro h1 { margin: 0; color: var(--ink); font-size: 40px; line-height: 1.1; letter-spacing: -1.2px; font-weight: 700; }
+.intro h1 em { font-style: normal; color: var(--volt); }
+.intro p { margin: 0; color: var(--body); }
+.facts { display: flex; gap: 8px 28px; margin-top: 18px; font-family: var(--mono); font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.facts b { color: var(--ink); font-weight: 500; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; padding-bottom: 64px; }
+.panel { background: var(--soft); border: 1px solid var(--line); }
+.panel-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+
+form { display: flex; border-bottom: 1px solid var(--line); }
+textarea { flex: 1; resize: none; min-height: 84px; background: transparent; color: var(--ink); border: 0; padding: 16px; font: 15px/1.5 var(--sans); outline: none; }
+textarea::placeholder { color: var(--faint); }
+.send { align-self: stretch; width: 108px; background: var(--volt); color: var(--on-volt); border: 0; font-weight: 700; }
+.send:disabled { background: var(--raised); color: var(--muted); cursor: wait; }
+textarea:focus-visible, button:focus-visible { outline: 2px solid var(--volt); outline-offset: 2px; }
+
+.examples { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.examples button { display: flex; width: 100%; gap: 12px; text-align: left; background: none; border: 0; color: var(--body); padding: 8px 16px; font-size: 14px; }
+.examples button span { font-family: var(--mono); font-size: 11px; color: var(--faint); padding-top: 3px; min-width: 64px; }
+.examples button:hover { background: var(--card); color: var(--ink); }
+
+.answer { padding: 20px 16px 24px; min-height: 180px; color: var(--body); }
+.answer.empty { color: var(--faint); font-size: 14px; }
+.answer h1, .answer h2, .answer h3 { color: var(--ink); font-size: 17px; margin: 18px 0 8px; letter-spacing: -.2px; }
+.answer h1:first-child, .answer h2:first-child, .answer h3:first-child { margin-top: 0; }
+.answer p { margin: 0 0 10px; }
+.answer strong { color: var(--ink); }
+.answer table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; display: block; overflow-x: auto; }
+.answer th, .answer td { border-bottom: 1px solid var(--line); padding: 6px 10px 6px 0; text-align: left; white-space: nowrap; }
+.answer th { color: var(--muted); font-weight: 500; }
+.answer code { font-family: var(--mono); font-size: 13px; color: var(--volt); }
+.error { color: var(--bad); }
+
+.totals { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
+.totals div { padding: 14px 16px; border-right: 1px solid var(--line); }
+.totals div:last-child { border-right: 0; }
+.totals small { display: block; font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.totals b { display: block; color: var(--ink); font: 500 20px/1.3 var(--mono); margin-top: 4px; }
+.steps { list-style: none; margin: 0; padding: 8px 0; font-family: var(--mono); font-size: 12px; }
+.steps li { padding: 10px 16px 10px 36px; position: relative; }
+.steps li::before { content: ""; position: absolute; left: 18px; top: 16px; width: 7px; height: 7px; background: var(--muted); }
+.steps li::after { content: ""; position: absolute; left: 21px; top: 26px; bottom: -10px; width: 1px; background: var(--line); }
+.steps li:last-child::after { display: none; }
+.steps li.llm::before { background: var(--volt); }
+.steps li.tool::before { background: var(--tool); }
+.steps li.err::before { background: var(--bad); }
+.step-title { color: var(--ink); display: flex; justify-content: space-between; gap: 12px; }
+.step-meta { color: var(--muted); margin-top: 2px; }
+details { margin-top: 6px; }
+summary { color: var(--muted); cursor: pointer; }
+pre { margin: 6px 0 0; padding: 10px; background: var(--canvas); border: 1px solid var(--line); color: var(--body); white-space: pre-wrap; word-break: break-word; max-height: 220px; overflow: auto; font-size: 11.5px; }
+.steps .empty { color: var(--faint); font-family: var(--sans); font-size: 14px; padding-left: 16px; }
+.steps .empty::before, .steps .empty::after { display: none; }
+.working { color: var(--volt); }
+
+section[hidden] { display: none; }
+.evals { padding: 32px 0 64px; }
+.evals > p { max-width: 720px; margin: 0 0 24px; }
+.runs { width: 100%; border-collapse: collapse; font-size: 14px; }
+.runs th { text-align: left; font: 500 11px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; border-bottom: 1px solid var(--line-strong); }
+.runs td { padding: 14px 12px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 13px; color: var(--ink); }
+.runs td:first-child { font-family: var(--sans); font-weight: 600; }
+.rate { display: flex; align-items: center; gap: 10px; }
+.rate i { display: block; height: 6px; background: var(--volt); }
+.matrix { margin-top: 36px; overflow-x: auto; }
+.matrix table { border-collapse: collapse; font: 12px var(--mono); }
+.matrix th, .matrix td { padding: 7px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.matrix th { color: var(--muted); font-weight: 500; }
+.pass { color: var(--ok); } .fail { color: var(--bad); cursor: help; }
+.note { color: var(--muted); font-size: 13px; margin-top: 16px; }
+
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 32px 0 64px; }
+.how div { background: var(--soft); padding: 22px; }
+.how h3 { margin: 0 0 8px; color: var(--ink); font-size: 16px; }
+.how p { margin: 0; font-size: 14px; }
+.how code { font-family: var(--mono); font-size: 12.5px; color: var(--volt); }
+
+@media (max-width: 900px) {
+  .intro, .grid { grid-template-columns: 1fr; }
+  .intro h1 { font-size: 30px; }
+  .how { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .wrap { padding: 0 16px; }
+  .byline span { display: none; }
+  .totals { grid-template-columns: repeat(2, 1fr); }
+  .totals div:nth-child(2) { border-right: 0; }
+  .totals div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .send { width: 84px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="brand"><span class="mark"><i></i></span>Kade Ops Agent</div>
+    <div class="byline"><span>Built by </span><a href="https://dpines.dev" target="_blank" rel="noopener">Eugenio Díaz</a></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="agent">Agent</button>
+    <button role="tab" aria-selected="false" data-tab="evals">Evals</button>
+    <button role="tab" aria-selected="false" data-tab="how">How it works</button>
+  </nav>
+
+  <section id="tab-agent">
+    <div class="intro">
+      <div>
+        <h1>An internal agent that answers from <em>company data</em>, not from memory.</h1>
+      </div>
+      <div>
+        <p>Kade Logistics is a fictional freight forwarder. The agent searches its policies and contracts, queries invoices in its ERP and opens helpdesk tickets. Every step is traced, with tokens, cost and latency.</p>
+        <div class="facts" id="facts"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-head"><span>Ask</span><span id="model"></span></div>
+        <form id="ask">
+          <textarea id="q" maxlength="1000" placeholder="Ask about a policy, a contract, an invoice… or ask for a report." aria-label="Question"></textarea>
+          <button class="send" id="send" type="submit">Run</button>
+        </form>
+        <div class="examples" id="examples"></div>
+        <div class="answer empty" id="answer">The answer appears here, with the source document for each fact.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><span>Trace</span><span id="stop"></span></div>
+        <div class="totals">
+          <div><small>Cost</small><b id="t-cost">–</b></div>
+          <div><small>Latency</small><b id="t-lat">–</b></div>
+          <div><small>Tokens in/out</small><b id="t-tok">–</b></div>
+          <div><small>Cache read</small><b id="t-cache">–</b></div>
+        </div>
+        <ol class="steps" id="steps"><li class="empty">Model calls and tool calls show up here in order.</li></ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-evals" class="evals" hidden>
+    <p>Each configuration answers the same questions, and every answer is graded automatically. The grader checks for the facts that must appear, numbers the agent must not invent and the tool it should have used. Changing the model, the effort level or the system prompt is a measured decision, not a guess.</p>
+    <div id="evals-body"><p class="note">Loading…</p></div>
+  </section>
+
+  <section id="tab-how" hidden>
+    <div class="how">
+      <div><h3>Retrieval</h3><p>The 8 documents are split by section and indexed with BM25, implemented in about 50 lines with no vector database. That is enough for a corpus this size. Hybrid search with embeddings is the next step when it grows.</p></div>
+      <div><h3>Tools</h3><p><code>search_documents</code>, <code>read_document</code>, <code>query_invoices</code> (ERP) and <code>create_ticket</code> (helpdesk). Schemas are closed, and tool errors go back to the model as <code>is_error</code> results so it can recover.</p></div>
+      <div><h3>Agent loop</h3><p>A manual tool-use loop on the Anthropic Python SDK, capped at 8 steps. It handles refusals, <code>max_tokens</code> and <code>pause_turn</code> explicitly, and falls back server-side to another model when a request is declined.</p></div>
+      <div><h3>Cost and speed</h3><p>Prompt caching on the system prompt and tool definitions. Each call's usage is priced per model and summed into the trace, and the Evals tab compares cost per answer across models and effort levels.</p></div>
+      <div><h3>Guards</h3><p>Rate limit per IP, a daily API budget, a 1,000-character question cap and an 8-step cap. Tickets are created only when the user asks for one. For a demo the limits live in memory; in production they would sit in Redis or the gateway.</p></div>
+      <div><h3>Tests</h3><p><code>pytest</code> covers retrieval, tools, the agent loop with a fake client, the API guards and the grader. Evals run separately because they call the real model and cost money.</p></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const EXAMPLES = [
+  ["policy", "Can I fly business class to New York? The flight is 7.5 hours."],
+  ["contract", "Did TransNordic meet their on-time delivery guarantee in Q3 2026, and if not, what are we entitled to?"],
+  ["erp", "Which supplier invoices are overdue right now and what's the total?"],
+  ["report", "Write a short report of all open invoices grouped by supplier, with totals."],
+  ["action", "Open an urgent IT ticket: the warehouse management system is down in Rotterdam for everyone."],
+];
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = (n) => "$" + (n < 0.01 ? n.toFixed(4) : n.toFixed(3));
+const secs = (ms) => (ms / 1000).toFixed(1) + "s";
+
+for (const [kind, q] of EXAMPLES) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.innerHTML = `<span>${kind}</span>${esc(q)}`;
+  b.onclick = () => { $("q").value = q; run(); };
+  $("examples").append(b);
+}
+
+document.querySelectorAll("nav.tabs button").forEach((btn) => {
+  btn.onclick = () => {
+    document.querySelectorAll("nav.tabs button").forEach((b) => b.setAttribute("aria-selected", b === btn));
+    for (const t of ["agent", "evals", "how"]) $("tab-" + t).hidden = t !== btn.dataset.tab;
+    if (btn.dataset.tab === "evals") loadEvals();
+  };
+});
+
+fetch("/api/meta").then((r) => r.json()).then((m) => {
+  $("model").textContent = `${m.model} · effort ${m.effort}`;
+  $("facts").innerHTML = `<span><b>${m.documents.length}</b> documents</span><span><b>${m.chunks}</b> indexed sections</span><span><b>${m.invoices}</b> ERP invoices</span><span><b>4</b> tools</span>`;
+});
+
+$("ask").onsubmit = (e) => { e.preventDefault(); run(); };
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); run(); } });
+
+async function run() {
+  const question = $("q").value.trim();
+  if (question.length < 3 || $("send").disabled) return;
+  $("send").disabled = true;
+  $("send").textContent = "Running";
+  $("answer").className = "answer empty";
+  $("answer").textContent = "Working…";
+  $("steps").innerHTML = `<li class="llm"><div class="step-title working">Calling the model…</div></li>`;
+  $("stop").textContent = "";
+  for (const id of ["t-cost", "t-lat", "t-tok", "t-cache"]) $(id).textContent = "–";
+  try {
+    const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Request failed.");
+    render(data);
+  } catch (err) {
+    $("answer").className = "answer error";
+    $("answer").textContent = err.message;
+    $("steps").innerHTML = `<li class="empty">No trace.</li>`;
+  } finally {
+    $("send").disabled = false;
+    $("send").textContent = "Run";
+  }
+}
+
+function render({ answer, stop, trace }) {
+  $("answer").className = "answer";
+  $("answer").innerHTML = DOMPurify.sanitize(marked.parse(answer));
+  $("stop").textContent = stop;
+  $("t-cost").textContent = money(trace.cost_usd);
+  $("t-lat").textContent = secs(trace.latency_ms);
+  $("t-tok").textContent = `${trace.input_tokens.toLocaleString()}/${trace.output_tokens.toLocaleString()}`;
+  $("t-cache").textContent = trace.cache_read_tokens.toLocaleString();
+  $("steps").innerHTML = trace.steps.map((s) => s.type === "llm"
+    ? `<li class="llm"><div class="step-title"><span>${esc(s.model)}</span><span>${secs(s.latency_ms)}</span></div>
+       <div class="step-meta">${s.input_tokens.toLocaleString()} in · ${s.output_tokens.toLocaleString()} out · ${s.cache_read_tokens.toLocaleString()} cached · ${money(s.cost_usd)} · ${esc(s.stop_reason)}</div></li>`
+    : `<li class="tool${s.is_error ? " err" : ""}"><div class="step-title"><span>${esc(s.name)}</span><span>${s.latency_ms}ms</span></div>
+       <div class="step-meta">${esc(JSON.stringify(s.input))}</div>
+       <details><summary>output</summary><pre>${esc(pretty(s.output_preview))}</pre></details></li>`).join("");
+}
+
+function pretty(s) {
+  try { return JSON.stringify(JSON.parse(s), null, 2); } catch { return s; }
+}
+
+let evalsLoaded = false;
+async function loadEvals() {
+  if (evalsLoaded) return;
+  evalsLoaded = true;
+  const data = await fetch("/api/evals").then((r) => r.json());
+  if (!data.runs.length) { $("evals-body").innerHTML = `<p class="note">No eval results published yet.</p>`; return; }
+  const runs = data.runs;
+  const rows = runs.map((r) => `<tr><td>${esc(r.config)}</td><td>${esc(r.model)}</td><td>${esc(r.effort)}</td><td>${esc(r.prompt)}</td>
+    <td><div class="rate"><i style="width:${Math.round(r.pass_rate * 80)}px"></i>${Math.round(r.pass_rate * 100)}%</div></td>
+    <td>${money(r.avg_cost_usd)}</td><td>${secs(r.avg_latency_ms)}</td><td>${r.avg_tool_calls}</td></tr>`).join("");
+  const ids = runs[0].cases.map((c) => c.id);
+  const matrix = ids.map((id) => `<tr><td>${esc(id)}</td>${runs.map((r) => {
+    const c = r.cases.find((x) => x.id === id);
+    return c.passed ? `<td class="pass">pass</td>` : `<td class="fail" title="${esc(c.failures.join("; "))}">fail</td>`;
+  }).join("")}</tr>`).join("");
+  $("evals-body").innerHTML = `
+    <table class="runs"><thead><tr><th>Config</th><th>Model</th><th>Effort</th><th>Prompt</th><th>Pass rate</th><th>Cost / answer</th><th>Latency</th><th>Tool calls</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="matrix"><table><thead><tr><th>case</th>${runs.map((r) => `<th>${esc(r.config)}</th>`).join("")}</tr></thead><tbody>${matrix}</tbody></table></div>
+    <p class="note">${data.case_count} cases · run ${esc(data.generated_at.slice(0, 10))} · invoice dates evaluated as of ${esc(data.as_of)}. Prompt v0 is a one-line system prompt; v1 is the production prompt. Hover a failure to see why it failed.</p>`;
+}
+</script>
+</body>
+</html>

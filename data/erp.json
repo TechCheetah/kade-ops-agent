@@ -1,0 +1,12 @@
+{
+  "invoices": [
+    {"id": "INV-24051", "supplier": "TransNordic Haulage", "amount_eur": 48250.00, "issue_date": "2026-08-04", "due_date": "2026-09-18", "status": "paid"},
+    {"id": "INV-24077", "supplier": "TransNordic Haulage", "amount_eur": 51900.00, "issue_date": "2026-09-01", "due_date": "2026-10-16", "status": "open"},
+    {"id": "INV-24102", "supplier": "TransNordic Haulage", "amount_eur": 49875.50, "issue_date": "2026-10-01", "due_date": "2026-11-15", "status": "open"},
+    {"id": "INV-24090", "supplier": "GreenPack Solutions", "amount_eur": 9420.00, "issue_date": "2026-09-15", "due_date": "2026-10-15", "status": "open"},
+    {"id": "INV-24110", "supplier": "GreenPack Solutions", "amount_eur": 10180.00, "issue_date": "2026-10-20", "due_date": "2026-11-19", "status": "open"},
+    {"id": "INV-24063", "supplier": "Rhine Express", "amount_eur": 22310.00, "issue_date": "2026-08-20", "due_date": "2026-09-19", "status": "disputed"},
+    {"id": "INV-24095", "supplier": "Rhine Express", "amount_eur": 19870.00, "issue_date": "2026-09-25", "due_date": "2026-10-25", "status": "open"},
+    {"id": "INV-24112", "supplier": "Officeline", "amount_eur": 1240.75, "issue_date": "2026-10-22", "due_date": "2026-11-21", "status": "paid"}
+  ]
+}
