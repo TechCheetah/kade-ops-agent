@@ -14,7 +14,7 @@ The tools in `app/tools.py` search and read documents, query ERP invoices and cr
 
 The system prompt and tool definitions are cached. Each call's usage is priced by model and added to the trace.
 
-The eval set (`evals/cases.json`, 21 cases) checks each answer for the facts it must contain, numbers it must not invent, the tool it should have used and tickets it must not open unasked. `evals/run.py` runs it across model, effort and prompt configurations. Haiku 5.5 passed the same cases as Opus 5.5 for about 1/24 of the cost per answer, so the demo runs on Haiku.
+The eval set (`evals/cases.json`, 21 cases) checks each answer for the facts it must contain, numbers it must not invent, the tool it should have used and tickets it must not open unasked. `evals/run.py` runs it across model, effort and prompt configurations. Haiku 5.5 passed the same cases as Opus 5.5 for about 1/35 of the cost per answer, so the demo runs on Haiku.
 
 Ticket creation is blocked in code unless the user's current message asks for a ticket, so the rule doesn't depend on the prompt alone. The API limits each IP's request rate, caps the daily API spend and rejects long questions and long histories. In production, Vercel's firewall also rate-limits `/api/ask` per IP.
 

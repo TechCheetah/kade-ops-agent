@@ -71,7 +71,6 @@ def run_config(name: str, cases: list[dict]) -> dict:
         })
         print(f"  {'PASS' if not failures else 'FAIL'} {case['id']:<22} ${result.trace.cost_usd:.4f} "
               f"{result.trace.latency_ms / 1000:.1f}s {'; '.join(failures)}")
-    n = len(rows)
     return {
         "config": name,
         "run_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -80,12 +79,36 @@ def run_config(name: str, cases: list[dict]) -> dict:
         "model": cfg["model"],
         "effort": cfg["effort"],
         "prompt": cfg["prompt"],
+        **summarize(rows),
+        "cases": rows,
+    }
+
+
+def summarize(rows: list[dict]) -> dict:
+    n = len(rows)
+    return {
         "pass_rate": round(sum(r["passed"] for r in rows) / n, 3),
         "avg_cost_usd": round(sum(r["cost_usd"] for r in rows) / n, 5),
         "avg_latency_ms": round(sum(r["latency_ms"] for r in rows) / n),
         "avg_tool_calls": round(sum(r["tool_calls"] for r in rows) / n, 2),
-        "cases": rows,
     }
+
+
+def regrade(out: Path, cases: list[dict]):
+    """Re-apply text checks to stored answers after a grader fix, without calling the model again."""
+    data = json.loads(out.read_text())
+    by_id = {c["id"]: c for c in cases}
+    for run in data["runs"]:
+        for row in run["cases"]:
+            text_case = {k: v for k, v in by_id[row["id"]].items() if k in ("all", "any", "none")}
+            kept = [f for f in row["failures"] if f.startswith(("didn't call", "called", "incomplete"))]
+            row["failures"] = kept + grade(text_case, row["answer"], [])
+            row["passed"] = not row["failures"]
+        run.update(summarize(run["cases"]))
+        run["regraded_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        print(f"{run['config']}: {run['pass_rate']:.0%}")
+    data["cases_sha"] = hashlib.sha256((HERE / "cases.json").read_bytes()).hexdigest()[:12]
+    out.write_text(json.dumps(data, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
@@ -93,8 +116,11 @@ if __name__ == "__main__":
 
     os.environ.setdefault("AGENT_TODAY", "2026-11-01")
     cases = json.loads((HERE / "cases.json").read_text())
-    names = sys.argv[1:] or list(CONFIGS)
     out = HERE / "results.json"
+    if sys.argv[1:] == ["--regrade"]:
+        regrade(out, cases)
+        sys.exit()
+    names = sys.argv[1:] or list(CONFIGS)
     previous = json.loads(out.read_text())["runs"] if out.exists() else []
     runs = [r for r in previous if r["config"] not in names]
     for name in names:
