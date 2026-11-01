@@ -21,276 +21,410 @@
   --ok: #22c55e; --bad: #ef4444; --tool: #7dd3fc;
   --sans: "IBM Plex Sans", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;
+  --col: 760px;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; background: var(--canvas); color: var(--body); font: 15px/1.55 var(--sans); }
+html, body { margin: 0; background: var(--canvas); color: var(--body); font: 15px/1.6 var(--sans); }
+body { min-height: 100dvh; display: flex; flex-direction: column; }
 a { color: var(--ink); }
-button { font: inherit; cursor: pointer; }
-.wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+button { font: inherit; cursor: pointer; color: inherit; }
+:focus-visible { outline: 2px solid var(--volt); outline-offset: 2px; }
+.icon { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
-header { border-bottom: 1px solid var(--line); }
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 700; letter-spacing: -.2px; }
+header { position: sticky; top: 0; z-index: 10; background: var(--canvas); border-bottom: 1px solid var(--line); }
+.bar { max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 56px; display: flex; align-items: center; gap: 28px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 700; letter-spacing: -.2px; white-space: nowrap; }
 .mark { width: 18px; height: 18px; background: var(--volt); display: grid; place-items: center; }
 .mark i { width: 6px; height: 10px; background: var(--on-volt); display: block; }
-.byline { font-size: 13px; color: var(--muted); }
-.byline a { color: var(--body); text-decoration-color: var(--faint); text-underline-offset: 3px; }
-
-nav.tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--line); }
-nav.tabs button { background: none; border: 0; color: var(--muted); padding: 14px 0; border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+nav.tabs { display: flex; gap: 22px; height: 100%; }
+nav.tabs button { background: none; border: 0; color: var(--muted); border-bottom: 2px solid transparent; font-weight: 500; padding: 0; }
 nav.tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--volt); }
+.byline { margin-left: auto; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.byline a { color: var(--body); text-decoration-color: var(--faint); text-underline-offset: 3px; }
+.new-chat { display: none; align-items: center; gap: 6px; background: none; border: 1px solid var(--line-strong); color: var(--body); padding: 5px 10px; font-size: 13px; }
+.new-chat.show { display: inline-flex; }
 
-.intro { padding: 40px 0 28px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
-.intro h1 { margin: 0; color: var(--ink); font-size: 40px; line-height: 1.1; letter-spacing: -1.2px; font-weight: 700; }
-.intro h1 em { font-style: normal; color: var(--volt); }
-.intro p { margin: 0; color: var(--body); }
-.facts { display: flex; gap: 8px 28px; margin-top: 18px; font-family: var(--mono); font-size: 12px; color: var(--muted); flex-wrap: wrap; }
-.facts b { color: var(--ink); font-weight: 500; }
+main { flex: 1; display: flex; flex-direction: column; }
+.col { width: 100%; max-width: var(--col); margin: 0 auto; padding: 0 20px; }
 
-.grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; padding-bottom: 64px; }
-.panel { background: var(--soft); border: 1px solid var(--line); }
-.panel-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+/* Empty state */
+.welcome { padding: 9vh 0 32px; }
+.welcome h1 { margin: 0 0 12px; color: var(--ink); font-size: 34px; line-height: 1.15; letter-spacing: -1px; }
+.welcome h1 em { font-style: normal; color: var(--volt); }
+.welcome p { margin: 0; max-width: 600px; }
+.welcome .fine { margin-top: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.suggest { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 28px; }
+.suggest button { text-align: left; background: var(--soft); border: 0; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.suggest button:hover { background: var(--card); }
+.suggest small { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+.suggest span { color: var(--ink); font-size: 14px; line-height: 1.45; }
 
-form { display: flex; border-bottom: 1px solid var(--line); }
-textarea { flex: 1; resize: none; min-height: 84px; background: transparent; color: var(--ink); border: 0; padding: 16px; font: 15px/1.5 var(--sans); outline: none; }
-textarea::placeholder { color: var(--faint); }
-.send { align-self: stretch; width: 108px; background: var(--volt); color: var(--on-volt); border: 0; font-weight: 700; }
-.send:disabled { background: var(--raised); color: var(--muted); cursor: wait; }
-textarea:focus-visible, button:focus-visible { outline: 2px solid var(--volt); outline-offset: 2px; }
+/* Conversation */
+.thread { padding: 28px 0 24px; display: flex; flex-direction: column; gap: 28px; }
+.msg-user { align-self: flex-end; max-width: 85%; background: var(--raised); color: var(--ink); padding: 10px 14px; white-space: pre-wrap; }
+.msg-agent { display: flex; flex-direction: column; gap: 12px; }
+.steps { border-left: 2px solid var(--line-strong); padding-left: 12px; }
+.steps summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.steps summary::-webkit-details-marker { display: none; }
+.steps summary .chev { transition: transform .15s; }
+.steps[open] summary .chev { transform: rotate(90deg); }
+.steps summary b { color: var(--body); font-weight: 500; }
+.steps ol { list-style: none; margin: 10px 0 2px; padding: 0; display: flex; flex-direction: column; gap: 10px; font-family: var(--mono); font-size: 12px; }
+.steps li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; }
+.steps li .icon { width: 14px; height: 14px; margin-top: 2px; color: var(--tool); }
+.steps li.err .icon { color: var(--bad); }
+.steps .t { color: var(--ink); }
+.steps .a { color: var(--muted); word-break: break-word; }
+.pending { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.dots { display: inline-flex; gap: 4px; }
+.dots i { width: 5px; height: 5px; background: var(--volt); animation: blink 1s infinite; }
+.dots i:nth-child(2) { animation-delay: .15s; } .dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes blink { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dots i { animation: none; opacity: .7; } }
 
-.examples { padding: 6px 0; border-bottom: 1px solid var(--line); }
-.examples button { display: flex; width: 100%; gap: 12px; text-align: left; background: none; border: 0; color: var(--body); padding: 8px 16px; font-size: 14px; }
-.examples button span { font-family: var(--mono); font-size: 11px; color: var(--faint); padding-top: 3px; min-width: 64px; }
-.examples button:hover { background: var(--card); color: var(--ink); }
-
-.answer { padding: 20px 16px 24px; min-height: 180px; color: var(--body); }
-.answer.empty { color: var(--faint); font-size: 14px; }
+.answer { color: var(--body); }
+.answer > :first-child { margin-top: 0; }
+.answer > :last-child { margin-bottom: 0; }
 .answer h1, .answer h2, .answer h3 { color: var(--ink); font-size: 17px; margin: 18px 0 8px; letter-spacing: -.2px; }
-.answer h1:first-child, .answer h2:first-child, .answer h3:first-child { margin-top: 0; }
 .answer p { margin: 0 0 10px; }
+.answer ul, .answer ol { margin: 0 0 10px; padding-left: 20px; }
 .answer strong { color: var(--ink); }
 .answer table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; display: block; overflow-x: auto; }
-.answer th, .answer td { border-bottom: 1px solid var(--line); padding: 6px 10px 6px 0; text-align: left; white-space: nowrap; }
+.answer th, .answer td { border-bottom: 1px solid var(--line); padding: 6px 14px 6px 0; text-align: left; white-space: nowrap; }
 .answer th { color: var(--muted); font-weight: 500; }
 .answer code { font-family: var(--mono); font-size: 13px; color: var(--volt); }
+.cite { display: inline; background: none; border: 0; padding: 0 2px; font: 500 11px var(--mono); color: var(--volt); vertical-align: super; line-height: 0; }
+.cite:hover { text-decoration: underline; }
 .error { color: var(--bad); }
 
+.foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; }
+.foot .label { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+.source { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px solid var(--line-strong); padding: 3px 9px; font-size: 12.5px; color: var(--body); }
+.source:hover { border-color: var(--volt); color: var(--ink); }
+.source.static { cursor: default; }
+.source.static:hover { border-color: var(--line-strong); color: var(--body); }
+.trace-link { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; color: var(--muted); font: 12px var(--mono); padding: 0; }
+.trace-link:hover { color: var(--volt); }
+
+/* Composer */
+.composer-wrap { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--canvas) 24px); padding: 24px 0 16px; }
+.composer { display: flex; align-items: flex-end; gap: 8px; background: var(--soft); border: 1px solid var(--line-strong); padding: 8px 8px 8px 14px; }
+.composer:focus-within { border-color: var(--muted); }
+.composer textarea { flex: 1; resize: none; background: transparent; border: 0; outline: none; color: var(--ink); font: 15px/1.5 var(--sans); padding: 6px 0; max-height: 180px; }
+.composer textarea::placeholder { color: var(--faint); }
+.send { width: 36px; height: 36px; display: grid; place-items: center; background: var(--volt); color: var(--on-volt); border: 0; }
+.send:disabled { background: var(--raised); color: var(--muted); cursor: not-allowed; }
+.hint { margin-top: 8px; font-size: 12px; color: var(--faint); text-align: center; }
+
+/* Drawer */
+.scrim { position: fixed; inset: 0; background: rgba(0, 0, 0, .55); z-index: 30; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100%); background: var(--soft); border-left: 1px solid var(--line-strong); z-index: 31; display: flex; flex-direction: column; }
+.scrim[hidden], .drawer[hidden] { display: none; }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 56px; border-bottom: 1px solid var(--line); }
+.drawer-head h2 { margin: 0; font-size: 15px; color: var(--ink); }
+.close { background: none; border: 0; color: var(--muted); padding: 6px; display: grid; place-items: center; }
+.close:hover { color: var(--ink); }
+.drawer-body { overflow-y: auto; flex: 1; }
 .totals { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
 .totals div { padding: 14px 16px; border-right: 1px solid var(--line); }
 .totals div:last-child { border-right: 0; }
-.totals small { display: block; font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-.totals b { display: block; color: var(--ink); font: 500 20px/1.3 var(--mono); margin-top: 4px; }
-.steps { list-style: none; margin: 0; padding: 8px 0; font-family: var(--mono); font-size: 12px; }
-.steps li { padding: 10px 16px 10px 36px; position: relative; }
-.steps li::before { content: ""; position: absolute; left: 18px; top: 16px; width: 7px; height: 7px; background: var(--muted); }
-.steps li::after { content: ""; position: absolute; left: 21px; top: 26px; bottom: -10px; width: 1px; background: var(--line); }
-.steps li:last-child::after { display: none; }
-.steps li.llm::before { background: var(--volt); }
-.steps li.tool::before { background: var(--tool); }
-.steps li.err::before { background: var(--bad); }
+.totals small { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.totals b { display: block; color: var(--ink); font: 500 17px/1.3 var(--mono); margin-top: 4px; }
+.timeline { list-style: none; margin: 0; padding: 8px 0 24px; font-family: var(--mono); font-size: 12px; }
+.timeline li { padding: 10px 16px 10px 36px; position: relative; }
+.timeline li::before { content: ""; position: absolute; left: 18px; top: 16px; width: 7px; height: 7px; background: var(--volt); }
+.timeline li::after { content: ""; position: absolute; left: 21px; top: 26px; bottom: -10px; width: 1px; background: var(--line); }
+.timeline li:last-child::after { display: none; }
+.timeline li.tool::before { background: var(--tool); }
+.timeline li.err::before { background: var(--bad); }
 .step-title { color: var(--ink); display: flex; justify-content: space-between; gap: 12px; }
-.step-meta { color: var(--muted); margin-top: 2px; }
-details { margin-top: 6px; }
-summary { color: var(--muted); cursor: pointer; }
-pre { margin: 6px 0 0; padding: 10px; background: var(--canvas); border: 1px solid var(--line); color: var(--body); white-space: pre-wrap; word-break: break-word; max-height: 220px; overflow: auto; font-size: 11.5px; }
-.steps .empty { color: var(--faint); font-family: var(--sans); font-size: 14px; padding-left: 16px; }
-.steps .empty::before, .steps .empty::after { display: none; }
-.working { color: var(--volt); }
+.step-meta { color: var(--muted); margin-top: 2px; word-break: break-word; }
+.timeline details { margin-top: 6px; }
+.timeline summary { color: var(--muted); cursor: pointer; }
+pre { margin: 6px 0 0; padding: 10px; background: var(--canvas); border: 1px solid var(--line); color: var(--body); white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow: auto; font-size: 11.5px; }
+.doc { padding: 20px 18px 40px; }
+.doc .answer h1 { font-size: 20px; margin-top: 0; }
 
-section[hidden] { display: none; }
-.evals { padding: 32px 0 64px; }
-.evals > p { max-width: 720px; margin: 0 0 24px; }
+/* Evals + How */
+section[hidden] { display: none !important; }
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 20px 64px; width: 100%; }
+.page > p { max-width: 720px; margin: 0 0 24px; }
 .runs { width: 100%; border-collapse: collapse; font-size: 14px; }
-.runs th { text-align: left; font: 500 11px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; border-bottom: 1px solid var(--line-strong); }
-.runs td { padding: 14px 12px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 13px; color: var(--ink); }
+.runs th { text-align: left; font: 500 11px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+.runs td { padding: 14px 12px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 13px; color: var(--ink); white-space: nowrap; }
 .runs td:first-child { font-family: var(--sans); font-weight: 600; }
+.runs tr.live td:first-child::after { content: "live"; margin-left: 8px; font: 500 10px var(--mono); color: var(--on-volt); background: var(--volt); padding: 1px 5px; vertical-align: 2px; }
 .rate { display: flex; align-items: center; gap: 10px; }
 .rate i { display: block; height: 6px; background: var(--volt); }
-.matrix { margin-top: 36px; overflow-x: auto; }
+.table-scroll { overflow-x: auto; }
+.matrix { margin-top: 36px; }
 .matrix table { border-collapse: collapse; font: 12px var(--mono); }
 .matrix th, .matrix td { padding: 7px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 .matrix th { color: var(--muted); font-weight: 500; }
 .pass { color: var(--ok); } .fail { color: var(--bad); cursor: help; }
 .note { color: var(--muted); font-size: 13px; margin-top: 16px; }
-
-.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 32px 0 64px; }
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
 .how div { background: var(--soft); padding: 22px; }
 .how h3 { margin: 0 0 8px; color: var(--ink); font-size: 16px; }
 .how p { margin: 0; font-size: 14px; }
 .how code { font-family: var(--mono); font-size: 12.5px; color: var(--volt); }
 
-@media (max-width: 900px) {
-  .intro, .grid { grid-template-columns: 1fr; }
-  .intro h1 { font-size: 30px; }
-  .how { grid-template-columns: 1fr; }
-}
-@media (max-width: 560px) {
-  .wrap { padding: 0 16px; }
-  .byline span { display: none; }
+#tab-chat { display: flex; flex-direction: column; flex: 1; }
+
+@media (max-width: 900px) { .how { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .bar { gap: 16px; padding: 0 16px; }
+  .col { padding: 0 16px; }
+  .page { padding: 24px 16px 48px; }
+  .byline { display: none; }
+  .new-chat { margin-left: auto; }
+  .new-chat span { display: none; }
+  .welcome { padding-top: 5vh; }
+  .welcome h1 { font-size: 27px; }
+  .suggest { grid-template-columns: 1fr; }
   .totals { grid-template-columns: repeat(2, 1fr); }
   .totals div:nth-child(2) { border-right: 0; }
   .totals div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-  .send { width: 84px; }
+  .hint { display: none; }
 }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/></symbol>
+  <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+</svg>
+
 <header>
-  <div class="wrap bar">
+  <div class="bar">
     <div class="brand"><span class="mark"><i></i></span>Kade Ops Agent</div>
-    <div class="byline"><span>Built by </span><a href="https://dpines.dev" target="_blank" rel="noopener">Eugenio Díaz</a></div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="chat">Chat</button>
+      <button role="tab" aria-selected="false" data-tab="evals">Evals</button>
+      <button role="tab" aria-selected="false" data-tab="how">How it works</button>
+    </nav>
+    <button class="new-chat" id="new-chat" type="button" aria-label="New chat"><svg class="icon"><use href="#i-plus"/></svg><span>New chat</span></button>
+    <div class="byline">Built by <a href="https://dpines.dev" target="_blank" rel="noopener">Eugenio Díaz</a></div>
   </div>
 </header>
 
-<div class="wrap">
-  <nav class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="agent">Agent</button>
-    <button role="tab" aria-selected="false" data-tab="evals">Evals</button>
-    <button role="tab" aria-selected="false" data-tab="how">How it works</button>
-  </nav>
-
-  <section id="tab-agent">
-    <div class="intro">
-      <div>
-        <h1>An internal agent that answers from <em>company data</em>, not from memory.</h1>
+<main>
+  <section id="tab-chat">
+    <div class="col" style="flex:1">
+      <div class="welcome" id="welcome">
+        <h1>Ask Kade's <em>operations agent</em>.</h1>
+        <p>It answers from company policies, supplier contracts and the ERP, cites its sources, writes short reports and opens helpdesk tickets. Kade Logistics is a fictional freight forwarder; all data is invented for this demo.</p>
+        <p class="fine" id="facts"></p>
+        <div class="suggest" id="suggest"></div>
       </div>
-      <div>
-        <p>Kade Logistics is a fictional freight forwarder. The agent searches its policies and contracts, queries invoices in its ERP and opens helpdesk tickets. Every step is traced, with tokens, cost and latency.</p>
-        <div class="facts" id="facts"></div>
-      </div>
+      <div class="thread" id="thread" aria-live="polite"></div>
     </div>
-
-    <div class="grid">
-      <div class="panel">
-        <div class="panel-head"><span>Ask</span><span id="model"></span></div>
-        <form id="ask">
-          <textarea id="q" maxlength="1000" placeholder="Ask about a policy, a contract, an invoice… or ask for a report." aria-label="Question"></textarea>
-          <button class="send" id="send" type="submit">Run</button>
+    <div class="composer-wrap">
+      <div class="col">
+        <form class="composer" id="composer">
+          <textarea id="q" rows="1" maxlength="1000" placeholder="Ask about a policy, a contract, an invoice…" aria-label="Message"></textarea>
+          <button class="send" id="send" type="submit" aria-label="Send" disabled><svg class="icon"><use href="#i-send"/></svg></button>
         </form>
-        <div class="examples" id="examples"></div>
-        <div class="answer empty" id="answer">The answer appears here, with the source document for each fact.</div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-head"><span>Trace</span><span id="stop"></span></div>
-        <div class="totals">
-          <div><small>Cost</small><b id="t-cost">–</b></div>
-          <div><small>Latency</small><b id="t-lat">–</b></div>
-          <div><small>Tokens in/out</small><b id="t-tok">–</b></div>
-          <div><small>Cache read</small><b id="t-cache">–</b></div>
-        </div>
-        <ol class="steps" id="steps"><li class="empty">Model calls and tool calls show up here in order.</li></ol>
+        <div class="hint">Enter to send · Shift+Enter for a new line</div>
       </div>
     </div>
   </section>
 
-  <section id="tab-evals" class="evals" hidden>
-    <p>Each configuration answers the same questions, and every answer is graded automatically. The grader checks for the facts that must appear, numbers the agent must not invent and the tool it should have used. Changing the model, the effort level or the system prompt is a measured decision, not a guess.</p>
+  <section id="tab-evals" class="page" hidden>
+    <p>Each configuration answers the same questions, and every answer is graded automatically. The grader checks for the facts that must appear, numbers the agent must not invent, the tool it should have used and actions it must not take unasked. The model this demo runs on was picked from these results.</p>
     <div id="evals-body"><p class="note">Loading…</p></div>
   </section>
 
-  <section id="tab-how" hidden>
+  <section id="tab-how" class="page" hidden>
     <div class="how">
       <div><h3>Retrieval</h3><p>The 8 documents are split by section and indexed with BM25, implemented in about 50 lines with no vector database. That is enough for a corpus this size. Hybrid search with embeddings is the next step when it grows.</p></div>
       <div><h3>Tools</h3><p><code>search_documents</code>, <code>read_document</code>, <code>query_invoices</code> (ERP) and <code>create_ticket</code> (helpdesk). Schemas are closed, and tool errors go back to the model as <code>is_error</code> results so it can recover.</p></div>
-      <div><h3>Agent loop</h3><p>A manual tool-use loop on the Anthropic Python SDK, capped at 8 steps. It handles refusals, <code>max_tokens</code> and <code>pause_turn</code> explicitly. On Opus and Sonnet, a declined request falls back server-side to another model.</p></div>
+      <div><h3>Agent loop</h3><p>A manual tool-use loop on the Anthropic Python SDK, capped at 8 steps. It handles refusals, <code>max_tokens</code> and <code>pause_turn</code> explicitly. Earlier turns are sent back as plain text, so follow-up questions keep their context. On Opus and Sonnet, a declined request falls back server-side to another model.</p></div>
       <div><h3>Cost and speed</h3><p>The demo runs on Haiku 5.5 because the evals showed it: the same pass rate as Opus 5.5 at about 1/24 of the cost per answer and roughly half the latency. Prompt caching covers the system prompt and tool definitions, and each call's usage is priced per model in the trace.</p></div>
-      <div><h3>Guards</h3><p>Rate limit per IP, a daily API budget, a 1,000-character question cap and an 8-step cap. Tickets are created only when the user asks for one. For a demo the limits live in memory; in production they would sit in Redis or the gateway.</p></div>
+      <div><h3>Guards</h3><p>A firewall rate limit per IP at the edge, a daily API budget, caps on question length, history and steps. Tickets are created only when the user asks for one.</p></div>
       <div><h3>Tests</h3><p><code>pytest</code> covers retrieval, tools, the agent loop with a fake client, the API guards and the grader. Evals run separately because they call the real model and cost money.</p></div>
     </div>
   </section>
-</div>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-labelledby="drawer-title" role="dialog">
+  <div class="drawer-head"><h2 id="drawer-title"></h2><button class="close" id="close" aria-label="Close"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
 
 <script>
-const EXAMPLES = [
-  ["policy", "Can I fly business class to New York? The flight is 7.5 hours."],
-  ["contract", "Did TransNordic meet their on-time delivery guarantee in Q3 2026, and if not, what are we entitled to?"],
-  ["erp", "Which supplier invoices are overdue right now and what's the total?"],
-  ["report", "Write a short report of all open invoices grouped by supplier, with totals."],
-  ["action", "Open an urgent IT ticket: the warehouse management system is down in Rotterdam for everyone."],
+const SUGGESTIONS = [
+  ["Policy", "Can I fly business class to New York? The flight is 7.5 hours."],
+  ["Contract + report + ERP", "How much credit are we owed by TransNordic for Q3 2026 under the service level clause?"],
+  ["Report", "Write a short report of all open invoices grouped by supplier, with totals."],
+  ["Action", "Open an urgent IT ticket: the warehouse management system is down in Rotterdam for everyone."],
 ];
+const TOOL_UI = {
+  search_documents: { icon: "i-search", verb: "Searched documents", arg: (i) => `"${i.query}"` },
+  read_document: { icon: "i-file", verb: "Read document", arg: (i) => i.doc_id },
+  query_invoices: { icon: "i-db", verb: "Queried ERP invoices", arg: (i) => Object.entries(i).map(([k, v]) => `${k}=${v}`).join(", ") || "all" },
+  create_ticket: { icon: "i-ticket", verb: "Created helpdesk ticket", arg: (i) => `${i.department} · ${i.priority}` },
+};
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const money = (n) => "$" + (n < 0.01 ? n.toFixed(4) : n.toFixed(3));
 const secs = (ms) => (ms / 1000).toFixed(1) + "s";
+const icon = (id, cls = "icon") => `<svg class="${cls}"><use href="#${id}"/></svg>`;
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
-for (const [kind, q] of EXAMPLES) {
+let docs = {};
+let history = [];
+const traces = [];
+let busy = false;
+
+fetch("/api/meta").then((r) => r.json()).then((m) => {
+  docs = Object.fromEntries(m.documents.map((d) => [d.doc_id, d.title]));
+  $("facts").textContent = `${m.documents.length} documents · ${m.chunks} indexed sections · ${m.invoices} ERP invoices · 4 tools · ${m.model}`;
+});
+
+for (const [kind, text] of SUGGESTIONS) {
   const b = document.createElement("button");
   b.type = "button";
-  b.innerHTML = `<span>${kind}</span>${esc(q)}`;
-  b.onclick = () => { $("q").value = q; run(); };
-  $("examples").append(b);
+  b.innerHTML = `<small>${esc(kind)}</small><span>${esc(text)}</span>`;
+  b.onclick = () => send(text);
+  $("suggest").append(b);
 }
+
+const q = $("q");
+const autosize = () => { q.style.height = "auto"; q.style.height = q.scrollHeight + "px"; };
+q.addEventListener("input", () => { autosize(); $("send").disabled = busy || q.value.trim().length < 2; });
+q.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(q.value); } });
+$("composer").onsubmit = (e) => { e.preventDefault(); send(q.value); };
+$("new-chat").onclick = () => {
+  history = []; traces.length = 0;
+  $("thread").innerHTML = ""; $("welcome").hidden = false;
+  $("new-chat").classList.remove("show"); q.focus();
+};
 
 document.querySelectorAll("nav.tabs button").forEach((btn) => {
   btn.onclick = () => {
     document.querySelectorAll("nav.tabs button").forEach((b) => b.setAttribute("aria-selected", b === btn));
-    for (const t of ["agent", "evals", "how"]) $("tab-" + t).hidden = t !== btn.dataset.tab;
+    for (const t of ["chat", "evals", "how"]) $("tab-" + t).hidden = t !== btn.dataset.tab;
     if (btn.dataset.tab === "evals") loadEvals();
   };
 });
 
-fetch("/api/meta").then((r) => r.json()).then((m) => {
-  $("model").textContent = `${m.model} · effort ${m.effort}`;
-  $("facts").innerHTML = `<span><b>${m.documents.length}</b> documents</span><span><b>${m.chunks}</b> indexed sections</span><span><b>${m.invoices}</b> ERP invoices</span><span><b>4</b> tools</span>`;
-});
+async function send(text) {
+  const question = text.trim();
+  if (question.length < 2 || busy) return;
+  busy = true;
+  q.value = ""; autosize(); $("send").disabled = true;
+  $("welcome").hidden = true;
+  $("new-chat").classList.add("show");
 
-$("ask").onsubmit = (e) => { e.preventDefault(); run(); };
-$("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); run(); } });
+  const user = document.createElement("div");
+  user.className = "msg-user";
+  user.textContent = question;
+  const agent = document.createElement("div");
+  agent.className = "msg-agent";
+  agent.innerHTML = `<div class="pending"><span class="dots"><i></i><i></i><i></i></span>Working: searching documents and systems</div>`;
+  $("thread").append(user, agent);
+  agent.scrollIntoView({ behavior: "smooth", block: "end" });
 
-async function run() {
-  const question = $("q").value.trim();
-  if (question.length < 3 || $("send").disabled) return;
-  $("send").disabled = true;
-  $("send").textContent = "Running";
-  $("answer").className = "answer empty";
-  $("answer").textContent = "Working…";
-  $("steps").innerHTML = `<li class="llm"><div class="step-title working">Calling the model…</div></li>`;
-  $("stop").textContent = "";
-  for (const id of ["t-cost", "t-lat", "t-tok", "t-cache"]) $(id).textContent = "–";
   try {
-    const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) });
-    const data = await res.json();
-    if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Request failed.");
-    render(data);
+    const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, history: history.slice(-8) }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(res.status === 429 ? "You've reached this demo's limit for the hour. Please try again later." : (typeof data.detail === "string" ? data.detail : "Something went wrong. Please try again."));
+    renderAnswer(agent, data);
+    history.push({ role: "user", content: question }, { role: "assistant", content: data.answer.slice(0, 6000) });
   } catch (err) {
-    $("answer").className = "answer error";
-    $("answer").textContent = err.message;
-    $("steps").innerHTML = `<li class="empty">No trace.</li>`;
+    agent.innerHTML = `<p class="error">${esc(err.message)}</p>`;
   } finally {
-    $("send").disabled = false;
-    $("send").textContent = "Run";
+    busy = false;
+    $("send").disabled = q.value.trim().length < 2;
+    q.focus();
   }
 }
 
-function render({ answer, stop, trace }) {
-  $("answer").className = "answer";
-  $("answer").innerHTML = DOMPurify.sanitize(marked.parse(answer));
-  $("stop").textContent = stop;
-  $("t-cost").textContent = money(trace.cost_usd);
-  $("t-lat").textContent = secs(trace.latency_ms);
-  $("t-tok").textContent = `${trace.input_tokens.toLocaleString()}/${trace.output_tokens.toLocaleString()}`;
-  $("t-cache").textContent = trace.cache_read_tokens.toLocaleString();
-  $("steps").innerHTML = trace.steps.map((s) => s.type === "llm"
-    ? `<li class="llm"><div class="step-title"><span>${esc(s.model)}</span><span>${secs(s.latency_ms)}</span></div>
-       <div class="step-meta">${s.input_tokens.toLocaleString()} in · ${s.output_tokens.toLocaleString()} out · ${s.cache_read_tokens.toLocaleString()} cached · ${money(s.cost_usd)} · ${esc(s.stop_reason)}</div></li>`
-    : `<li class="tool${s.is_error ? " err" : ""}"><div class="step-title"><span>${esc(s.name)}</span><span>${s.latency_ms}ms</span></div>
-       <div class="step-meta">${esc(JSON.stringify(s.input))}</div>
-       <details><summary>output</summary><pre>${esc(pretty(s.output_preview))}</pre></details></li>`).join("");
+function renderAnswer(el, { answer, trace }) {
+  const idx = traces.push(trace) - 1;
+  const tools = trace.steps.filter((s) => s.type === "tool");
+  const verbs = [...new Set(tools.map((t) => (TOOL_UI[t.name]?.verb || t.name).toLowerCase()))];
+
+  const cited = [];
+  const html = DOMPurify.sanitize(marked.parse(answer)).replace(/\[([a-z0-9-]+)\]/g, (m, id) => {
+    if (!docs[id]) return m;
+    if (!cited.includes(id)) cited.push(id);
+    return `<button class="cite" type="button" data-doc="${id}" title="${esc(docs[id])}">${cited.indexOf(id) + 1}</button>`;
+  });
+  const systems = [];
+  if (tools.some((t) => t.name === "query_invoices")) systems.push(["i-db", "ERP · invoices"]);
+  if (tools.some((t) => t.name === "create_ticket")) systems.push(["i-ticket", "Helpdesk"]);
+
+  const steps = tools.length ? `
+    <details class="steps"><summary>${icon("i-chev", "icon chev")}<b>${esc(cap(verbs.join(", ")))}</b> · ${tools.length} tool call${tools.length > 1 ? "s" : ""} · ${secs(trace.latency_ms)}</summary>
+      <ol>${tools.map((t) => `<li class="${t.is_error ? "err" : ""}">${icon(TOOL_UI[t.name]?.icon || "i-activity")}<div><span class="t">${esc(TOOL_UI[t.name]?.verb || t.name)}</span> <span class="a">${esc(TOOL_UI[t.name]?.arg(t.input) ?? "")}</span></div></li>`).join("")}</ol>
+    </details>` : "";
+
+  el.innerHTML = `${steps}
+    <div class="answer">${html}</div>
+    <div class="foot">
+      ${cited.length || systems.length ? `<span class="label">Sources</span>` : ""}
+      ${cited.map((id, i) => `<button class="source" type="button" data-doc="${id}">${icon("i-file")}${i + 1} · ${esc(docs[id])}</button>`).join("")}
+      ${systems.map(([ic, name]) => `<span class="source static">${icon(ic)}${esc(name)}</span>`).join("")}
+      <button class="trace-link" type="button" data-trace="${idx}">${icon("i-activity")}${money(trace.cost_usd)} · trace</button>
+    </div>`;
+  el.querySelectorAll("[data-doc]").forEach((b) => (b.onclick = () => openDoc(b.dataset.doc)));
+  el.querySelector("[data-trace]").onclick = () => openTrace(traces[idx]);
 }
 
-function pretty(s) {
-  try { return JSON.stringify(JSON.parse(s), null, 2); } catch { return s; }
+function openDrawer(title, body) {
+  $("drawer-title").textContent = title;
+  $("drawer-body").innerHTML = body;
+  $("drawer-body").scrollTop = 0;
+  $("scrim").hidden = $("drawer").hidden = false;
+  $("close").focus();
 }
+function closeDrawer() { $("scrim").hidden = $("drawer").hidden = true; }
+$("close").onclick = closeDrawer;
+$("scrim").onclick = closeDrawer;
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+
+async function openDoc(id) {
+  openDrawer(docs[id] || id, `<div class="doc"><p class="note">Loading…</p></div>`);
+  const d = await fetch(`/api/docs/${encodeURIComponent(id)}`).then((r) => r.json());
+  $("drawer-body").innerHTML = `<div class="doc"><p class="note" style="margin:0 0 14px">Source document · <code>${esc(id)}</code></p><div class="answer">${DOMPurify.sanitize(marked.parse(d.text))}</div></div>`;
+}
+
+function openTrace(t) {
+  openDrawer("Trace", `
+    <div class="totals">
+      <div><small>Cost</small><b>${money(t.cost_usd)}</b></div>
+      <div><small>Latency</small><b>${secs(t.latency_ms)}</b></div>
+      <div><small>Tokens in/out</small><b>${t.input_tokens.toLocaleString()}/${t.output_tokens.toLocaleString()}</b></div>
+      <div><small>Cache read</small><b>${t.cache_read_tokens.toLocaleString()}</b></div>
+    </div>
+    <ol class="timeline">${t.steps.map((s) => s.type === "llm"
+      ? `<li><div class="step-title"><span>${esc(s.model)}</span><span>${secs(s.latency_ms)}</span></div>
+         <div class="step-meta">${s.input_tokens.toLocaleString()} in · ${s.output_tokens.toLocaleString()} out · ${s.cache_read_tokens.toLocaleString()} cached · ${money(s.cost_usd)} · ${esc(s.stop_reason)}</div></li>`
+      : `<li class="tool${s.is_error ? " err" : ""}"><div class="step-title"><span>${esc(s.name)}</span><span>${s.latency_ms}ms</span></div>
+         <div class="step-meta">${esc(JSON.stringify(s.input))}</div>
+         <details><summary>output</summary><pre>${esc(pretty(s.output_preview))}</pre></details></li>`).join("")}</ol>`);
+}
+
+function pretty(s) { try { return JSON.stringify(JSON.parse(s), null, 2); } catch { return s; } }
 
 let evalsLoaded = false;
 async function loadEvals() {
   if (evalsLoaded) return;
   evalsLoaded = true;
-  const data = await fetch("/api/evals").then((r) => r.json());
+  const [data, meta] = await Promise.all([fetch("/api/evals").then((r) => r.json()), fetch("/api/meta").then((r) => r.json())]);
   if (!data.runs.length) { $("evals-body").innerHTML = `<p class="note">No eval results published yet.</p>`; return; }
   const runs = data.runs;
-  const rows = runs.map((r) => `<tr><td>${esc(r.config)}</td><td>${esc(r.model)}</td><td>${esc(r.effort)}</td><td>${esc(r.prompt)}</td>
+  const rows = runs.map((r) => `<tr class="${r.model === meta.model && r.effort === meta.effort && r.prompt === "v1" ? "live" : ""}"><td>${esc(r.config)}</td><td>${esc(r.model)}</td><td>${esc(r.effort)}</td><td>${esc(r.prompt)}</td>
     <td><div class="rate"><i style="width:${Math.round(r.pass_rate * 80)}px"></i>${Math.round(r.pass_rate * 100)}%</div></td>
     <td>${money(r.avg_cost_usd)}</td><td>${secs(r.avg_latency_ms)}</td><td>${r.avg_tool_calls}</td></tr>`).join("");
   const ids = runs[0].cases.map((c) => c.id);
@@ -299,9 +433,9 @@ async function loadEvals() {
     return c.passed ? `<td class="pass">pass</td>` : `<td class="fail" title="${esc(c.failures.join("; "))}">fail</td>`;
   }).join("")}</tr>`).join("");
   $("evals-body").innerHTML = `
-    <table class="runs"><thead><tr><th>Config</th><th>Model</th><th>Effort</th><th>Prompt</th><th>Pass rate</th><th>Cost / answer</th><th>Latency</th><th>Tool calls</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="matrix"><table><thead><tr><th>case</th>${runs.map((r) => `<th>${esc(r.config)}</th>`).join("")}</tr></thead><tbody>${matrix}</tbody></table></div>
-    <p class="note">${data.case_count} cases · run ${esc(data.generated_at.slice(0, 10))} · invoice dates evaluated as of ${esc(data.as_of)}. Prompt v0 is a one-line system prompt; v1 is the production prompt. Hover a failure to see why it failed.</p>`;
+    <div class="table-scroll"><table class="runs"><thead><tr><th>Config</th><th>Model</th><th>Effort</th><th>Prompt</th><th>Pass rate</th><th>Cost / answer</th><th>Latency</th><th>Tool calls</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="matrix table-scroll"><table><thead><tr><th>case</th>${runs.map((r) => `<th>${esc(r.config)}</th>`).join("")}</tr></thead><tbody>${matrix}</tbody></table></div>
+    <p class="note">${data.case_count} cases · run ${esc(data.generated_at.slice(0, 10))} · invoice dates evaluated as of ${esc(data.as_of)}. Prompt v0 is a one-line system prompt; v1 is the production prompt.</p>`;
 }
 </script>
 </body>

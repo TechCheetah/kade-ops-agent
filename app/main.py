@@ -4,6 +4,7 @@ import time
 from collections import defaultdict, deque
 from dataclasses import asdict
 from datetime import date
+from typing import Literal
 
 import anthropic
 from fastapi import FastAPI, HTTPException, Request
@@ -23,8 +24,14 @@ _hits: dict[str, deque] = defaultdict(deque)
 _spend = {"day": date.today(), "usd": 0.0}
 
 
+class Turn(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=6000)
+
+
 class Ask(BaseModel):
-    question: str = Field(min_length=3, max_length=MAX_QUESTION_CHARS)
+    question: str = Field(min_length=2, max_length=MAX_QUESTION_CHARS)
+    history: list[Turn] = Field(default_factory=list, max_length=8)
 
 
 def _client_ip(request: Request) -> str:
@@ -61,6 +68,13 @@ def meta():
     }
 
 
+@app.get("/api/docs/{doc_id}")
+def document(doc_id: str):
+    if doc_id not in DOCUMENTS:
+        raise HTTPException(404, "Unknown document.")
+    return {"doc_id": doc_id, "text": DOCUMENTS[doc_id]}
+
+
 @app.get("/api/evals")
 def evals():
     path = ROOT / "evals" / "results.json"
@@ -77,7 +91,7 @@ def ask(body: Ask, request: Request):
     global _agent
     try:
         _agent = _agent or Agent()
-        result = _agent.run(body.question)
+        result = _agent.run(body.question, [t.model_dump() for t in body.history])
     except anthropic.RateLimitError:
         raise HTTPException(429, "The model is rate limited right now. Try again in a minute.")
     except anthropic.APIStatusError as e:

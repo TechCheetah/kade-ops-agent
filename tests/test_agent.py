@@ -54,3 +54,11 @@ def test_step_limit_stops_runaway_loops():
     client = FakeClient([loop] * 8)
     result = Agent(client=client, model="claude-haiku-5-5").run("loop")
     assert result.stop == "max_steps"
+
+
+def test_history_is_sent_before_the_new_question():
+    client = FakeClient([message([NS(type="text", text="€140")], "end_turn")])
+    history = [{"role": "user", "content": "Hotel limit Amsterdam?"}, {"role": "assistant", "content": "€180"}]
+    Agent(client=client, model="claude-haiku-5-5").run("And Berlin?", history)
+    assert [m["role"] for m in client.calls[0]["messages"][:3]] == ["user", "assistant", "user"]
+    assert client.calls[0]["messages"][2]["content"] == "And Berlin?"

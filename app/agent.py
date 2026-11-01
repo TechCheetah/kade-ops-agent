@@ -72,9 +72,10 @@ class Agent:
             )
         return self.client.messages.create(**params)
 
-    def run(self, question: str) -> AgentResult:
+    def run(self, question: str, history: list[dict] | None = None) -> AgentResult:
         trace = Trace(model=self.model)
-        messages = [{"role": "user", "content": question}]
+        # Earlier turns travel as plain text: final answers only, no tool calls or thinking blocks
+        messages = [*(history or []), {"role": "user", "content": question}]
         tools_used: list[str] = []
         started = time.perf_counter()
         stop = "max_steps"
