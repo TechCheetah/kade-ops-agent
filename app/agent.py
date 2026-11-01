@@ -1,3 +1,4 @@
+import json
 import time
 from dataclasses import dataclass, field
 
@@ -49,6 +50,10 @@ class AgentResult:
     trace: Trace
     tools_used: list[str]
 
+    @property
+    def complete(self) -> bool:
+        return self.stop == "end_turn"
+
 
 class Agent:
     def __init__(self, client: anthropic.Anthropic | None = None, model: str = MODEL, effort: str = EFFORT,
@@ -59,7 +64,7 @@ class Agent:
     def _call(self, messages: list):
         params = dict(
             model=self.model,
-            max_tokens=16000,
+            max_tokens=4096,
             system=self.system_prompt,
             tools=TOOLS,
             messages=messages,
@@ -100,8 +105,9 @@ class Agent:
                 stop = "refusal"
                 answer = "I can't help with that request."
                 break
-            if response.stop_reason == "max_tokens":
-                stop = "max_tokens"
+            if response.stop_reason not in ("end_turn", "stop_sequence", "tool_use", "pause_turn"):
+                # max_tokens, model_context_window_exceeded and anything newer: partial at best
+                stop = response.stop_reason
                 answer = _text(response) or "The answer was cut off. Try a narrower question."
                 break
 
@@ -118,7 +124,7 @@ class Agent:
             results = []
             for call in calls:
                 t1 = time.perf_counter()
-                output, is_error = run_tool(call.name, call.input)
+                output, is_error = run_tool(call.name, call.input, question)
                 tools_used.append(call.name)
                 trace.steps.append({
                     "type": "tool",
@@ -132,6 +138,9 @@ class Agent:
             messages.append({"role": "user", "content": results})
         else:
             answer = "I couldn't finish within the step limit. Try splitting the request."
+            created = [s["output_preview"] for s in trace.steps if s.get("name") == "create_ticket" and not s["is_error"]]
+            if created:
+                answer += " Tickets already created: " + ", ".join(json.loads(c)["ticket_id"] for c in created) + "."
 
         trace.latency_ms = round((time.perf_counter() - started) * 1000)
         trace.cost_usd = round(trace.cost_usd, 6)

@@ -141,8 +141,18 @@ HANDLERS = {
 }
 
 
-def run_tool(name: str, args: dict) -> tuple[str, bool]:
+TICKET_WORDS = ("ticket", "helpdesk", "help desk")
+
+
+def run_tool(name: str, args: dict, question: str = "") -> tuple[str, bool]:
+    # Side effects are allowed by application policy, not by the prompt alone
+    if name == "create_ticket" and not any(w in question.lower() for w in TICKET_WORDS):
+        return "Error: policy blocks ticket creation unless the user's current message asks for a ticket.", True
+    if name not in HANDLERS:
+        return f"Error: unknown tool '{name}'.", True
     try:
         return json.dumps(HANDLERS[name](**args), ensure_ascii=False), False
-    except Exception as e:
+    except (ValueError, TypeError) as e:
         return f"Error: {e}", True
+    except Exception:
+        return "Error: the tool failed unexpectedly.", True

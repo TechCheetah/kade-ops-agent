@@ -1,5 +1,7 @@
 """Run the eval set against one or more configs: python -m evals.run opus haiku haiku-minimal"""
+import hashlib
 import json
+import subprocess
 import re
 import sys
 import time
@@ -24,12 +26,24 @@ def normalize(text: str) -> str:
     return re.sub(r"(?<=\d)[,\s](?=\d{3}\b)", "", text)
 
 
+def contains(text: str, needle: str) -> bool:
+    """Whole-token match, so 180 doesn't match 1800 and 'no' doesn't match 'not'."""
+    n = normalize(needle)
+    left = r"(?<![\w.])" if n[0].isalnum() else ""
+    if n[-1].isdigit():
+        right = r"(?:\.0+)?(?![\d])"
+    elif n[-1].isalpha():
+        right = r"(?!\w)"
+    else:
+        right = ""
+    return re.search(left + re.escape(n) + right, normalize(text)) is not None
+
+
 def grade(case: dict, answer: str, tools: list[str]) -> list[str]:
-    a = normalize(answer)
-    failures = [f"missing '{s}'" for s in case.get("all", []) if normalize(s) not in a]
-    if case.get("any") and not any(normalize(s) in a for s in case["any"]):
+    failures = [f"missing '{s}'" for s in case.get("all", []) if not contains(answer, s)]
+    if case.get("any") and not any(contains(answer, s) for s in case["any"]):
         failures.append(f"none of {case['any']}")
-    failures += [f"contains '{s}'" for s in case.get("none", []) if normalize(s) in a]
+    failures += [f"contains '{s}'" for s in case.get("none", []) if contains(answer, s)]
     if case.get("tool") and case["tool"] not in tools:
         failures.append(f"didn't call {case['tool']}")
     if case.get("forbid_tool") in tools:
@@ -42,8 +56,10 @@ def run_config(name: str, cases: list[dict]) -> dict:
     agent = Agent(model=cfg["model"], effort=cfg["effort"], system_prompt=cfg["system_prompt"])
     rows = []
     for case in cases:
-        result = agent.run(case["q"])
+        result = agent.run(case["q"], case.get("history"))
         failures = grade(case, result.answer, result.tools_used)
+        if not result.complete:
+            failures.append(f"incomplete ({result.stop})")
         rows.append({
             "id": case["id"],
             "passed": not failures,
@@ -58,6 +74,9 @@ def run_config(name: str, cases: list[dict]) -> dict:
     n = len(rows)
     return {
         "config": name,
+        "run_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=HERE).stdout.strip(),
+        "cases_sha": hashlib.sha256((HERE / "cases.json").read_bytes()).hexdigest()[:12],
         "model": cfg["model"],
         "effort": cfg["effort"],
         "prompt": cfg["prompt"],
@@ -74,7 +93,7 @@ if __name__ == "__main__":
 
     os.environ.setdefault("AGENT_TODAY", "2026-11-01")
     cases = json.loads((HERE / "cases.json").read_text())
-    names = sys.argv[1:] or ["opus", "haiku", "haiku-minimal"]
+    names = sys.argv[1:] or list(CONFIGS)
     out = HERE / "results.json"
     previous = json.loads(out.read_text())["runs"] if out.exists() else []
     runs = [r for r in previous if r["config"] not in names]

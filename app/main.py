@@ -9,7 +9,7 @@ from typing import Literal
 import anthropic
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from .agent import Agent
 from .config import DAILY_BUDGET_USD, EFFORT, MAX_QUESTION_CHARS, MODEL, RATE_LIMIT_PER_HOUR, ROOT
@@ -22,6 +22,8 @@ _agent: Agent | None = None
 # Per-instance guards: good enough for a demo, a shared store would be needed at scale
 _hits: dict[str, deque] = defaultdict(deque)
 _spend = {"day": date.today(), "usd": 0.0}
+# Reserved before each call so concurrent requests can't all slip under the budget; settled after
+BUDGET_RESERVE_USD = 0.05
 
 
 class Turn(BaseModel):
@@ -33,13 +35,23 @@ class Ask(BaseModel):
     question: str = Field(min_length=2, max_length=MAX_QUESTION_CHARS)
     history: list[Turn] = Field(default_factory=list, max_length=8)
 
+    @field_validator("history")
+    @classmethod
+    def alternating_pairs(cls, turns: list[Turn]) -> list[Turn]:
+        if len(turns) % 2 or any(t.role != ("user" if i % 2 == 0 else "assistant") for i, t in enumerate(turns)):
+            raise ValueError("history must be user/assistant pairs, starting with user")
+        return turns
+
 
 def _client_ip(request: Request) -> str:
-    return request.headers.get("x-forwarded-for", request.client.host if request.client else "?").split(",")[0].strip()
+    # Vercel sets x-real-ip itself; x-forwarded-for can carry client-supplied values
+    return request.headers.get("x-real-ip") or (request.client.host if request.client else "?")
 
 
 def _check_limits(ip: str):
     now = time.time()
+    if len(_hits) > 10_000:
+        _hits.clear()
     q = _hits[ip]
     while q and now - q[0] > 3600:
         q.popleft()
@@ -50,6 +62,7 @@ def _check_limits(ip: str):
     if _spend["usd"] >= DAILY_BUDGET_USD:
         raise HTTPException(503, "The demo's daily API budget is used up. It resets at midnight UTC.")
     q.append(now)
+    _spend["usd"] += BUDGET_RESERVE_USD
 
 
 @app.get("/")
@@ -98,5 +111,11 @@ def ask(body: Ask, request: Request):
         raise HTTPException(502, f"Model API error ({e.status_code}).")
     except anthropic.APIConnectionError:
         raise HTTPException(502, "Could not reach the model API.")
-    _spend["usd"] += result.trace.cost_usd
-    return {"answer": result.answer, "stop": result.stop, "tools_used": result.tools_used, "trace": asdict(result.trace)}
+    _spend["usd"] += result.trace.cost_usd - BUDGET_RESERVE_USD
+    return {
+        "answer": result.answer,
+        "stop": result.stop,
+        "complete": result.complete,
+        "tools_used": result.tools_used,
+        "trace": asdict(result.trace),
+    }
