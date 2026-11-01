@@ -6,7 +6,7 @@ All company data in `data/` is invented for the demo.
 
 ## What it shows
 
-- **Agent loop**: a manual tool-use loop on the Anthropic Python SDK (`app/agent.py`), capped at 8 steps. It handles `refusal`, `max_tokens` and `pause_turn` explicitly and uses server-side model fallback.
+- **Agent loop**: a manual tool-use loop on the Anthropic Python SDK (`app/agent.py`), capped at 8 steps. It handles `refusal`, `max_tokens` and `pause_turn` explicitly and, on Opus and Sonnet, uses server-side model fallback.
 - **RAG**: section-level chunking and BM25 retrieval over 8 documents (`app/retrieval.py`), with no vector database because the corpus doesn't need one yet.
 - **Integrations**: an ERP invoice query and a helpdesk ticket tool (`app/tools.py`). Schemas are closed, and tool errors go back to the model so it can recover.
 - **Cost and observability**: prompt caching, per-call usage priced per model, and a trace for every request.
@@ -23,4 +23,4 @@ export ANTHROPIC_API_KEY=...
 .venv/bin/python -m evals.run opus haiku haiku-minimal   # real API calls, costs money
 ```
 
-Configuration: `AGENT_MODEL` (default `claude-opus-5-5`), `AGENT_EFFORT` (default `medium`), `RATE_LIMIT_PER_HOUR`, `DAILY_BUDGET_USD`, and `AGENT_TODAY` to pin the date for overdue calculations.
+Configuration: `AGENT_MODEL` (default `claude-haiku-5-5`, chosen from the evals: same pass rate as Opus 5.5 at about 1/24 of the cost), `AGENT_EFFORT` (default `medium`), `RATE_LIMIT_PER_HOUR`, `DAILY_BUDGET_USD`, and `AGENT_TODAY` to pin the date for overdue calculations.

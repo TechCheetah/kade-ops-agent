@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 
-MODEL = os.getenv("AGENT_MODEL", "claude-opus-5-5")
+MODEL = os.getenv("AGENT_MODEL", "claude-haiku-5-5")
 EFFORT = os.getenv("AGENT_EFFORT", "medium")
 MAX_STEPS = 8
 MAX_QUESTION_CHARS = 1000
